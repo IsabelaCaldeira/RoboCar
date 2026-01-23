@@ -96,26 +96,32 @@ def reculer(matrice:list, voiture:RoboCar)->None:
     else:
         print("MUR !")
 
-def keypressed(k):
+def lancement():
     """
-    Appel une fonction pour chaque touche pressé dans le terminale
+    Lance une interface terminal pour contrôler la voiture
     """
-    if k.keysym == "Left":
-        flash.s += -1
-    if k.keysym == "Right":
-        flash.s += 1
-    if k.keysym == "Up":
-        avancer(matrice, flash)
-    if k.keysym == "Down":
-        reculer(matrice, flash)
+    def keypressed(k):
+        """
+        Appel une fonction pour chaque touche pressé dans le terminale
+        """
+        if k.keysym == "Left":
+            flash.s += -1
+        if k.keysym == "Right":
+            flash.s += 1
+        if k.keysym == "Up":
+            avancer(matrice, flash)
+        if k.keysym == "Down":
+            reculer(matrice, flash)
+        affichage(matrice, flash)
+
+    root = tk.Tk()
+    root.bind('<KeyPress>', keypressed)
+
+    flash = RoboCar("Flash", (1,1), 0, 0)
+    matrice = [["O" for _ in range(3)] for _ in range(3)]
+
     affichage(matrice, flash)
+    root.mainloop()
 
-root = tk.Tk()
-root.bind('<KeyPress>', keypressed)
-
-
-flash = RoboCar("Flash", (1,1), 0, 0)
-matrice = [["O" for _ in range(3)] for _ in range(3)]
-
-affichage(matrice, flash)
-root.mainloop()
+if __name__ == "__main__":
+    lancement()
