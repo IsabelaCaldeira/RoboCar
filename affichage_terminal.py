@@ -13,17 +13,38 @@ def affichage(matrice:list, voiture:RoboCar)->None:
     for j in range(len(matrice)):
         for i in range(len(matrice[j])-1):
             if (i, j) == voiture.coo:
-                chaine += voiture.orientation() + " "
+                chaine += orientation(voiture) + " "
             else:
                 chaine += matrice[j][i] + " "
         if (i+1, j) == voiture.coo:
-            chaine += voiture.orientation() + "\n"
+            chaine += orientation(voiture) + "\n"
         else:
             chaine += matrice[j][i+1] + "\n"
     print(chaine)
     print(f"Coordoonées de la voiture: {voiture.coo}")
-    print(f"Orientation de la voiture: {voiture.orientation()}")
+    print(f"Orientation de la voiture: {orientation(voiture)}")
     print("----------------------------------------------------\n")
+
+def orientation(voiture:RoboCar)->str:
+    """
+    Renvoie une chaîne de caractère donnant la direction de la voiture
+    """
+    if voiture.s%8 == 0:
+        return "↑"
+    elif voiture.s%8 == 1:
+        return "↗"
+    elif voiture.s%8 == 2:
+        return "→"
+    elif voiture.s%8 == 3:
+        return "↘"
+    elif voiture.s%8 == 4:
+        return "↓"
+    elif voiture.s%8 == 5:
+        return "↙"
+    elif voiture.s%8 == 6:
+        return "←"
+    elif voiture.s%8 == 7:
+        return "↖"
 
 def avancer(matrice:list, voiture:RoboCar)->None:
     """
@@ -75,32 +96,26 @@ def reculer(matrice:list, voiture:RoboCar)->None:
     else:
         print("MUR !")
 
-def lancement():
+def keypressed(k):
     """
-    Lance une interface terminal pour contrôler la voiture
+    Appel une fonction pour chaque touche pressé dans le terminale
     """
-    def keypressed(k):
-        """
-        Appel une fonction pour chaque touche pressé dans le terminale
-        """
-        if k.keysym == "Left":
-            flash.s += -1
-        if k.keysym == "Right":
-            flash.s += 1
-        if k.keysym == "Up":
-            avancer(matrice, flash)
-        if k.keysym == "Down":
-            reculer(matrice, flash)
-        affichage(matrice, flash)
-
-    root = tk.Tk()
-    root.bind('<KeyPress>', keypressed)
-
-    flash = RoboCar("Flash", (1,1), 0, 0)
-    matrice = [["O" for _ in range(3)] for _ in range(3)]
-
+    if k.keysym == "Left":
+        flash.s += -1
+    if k.keysym == "Right":
+        flash.s += 1
+    if k.keysym == "Up":
+        avancer(matrice, flash)
+    if k.keysym == "Down":
+        reculer(matrice, flash)
     affichage(matrice, flash)
-    root.mainloop()
 
-if __name__ == "__main__":
-    lancement()
+root = tk.Tk()
+root.bind('<KeyPress>', keypressed)
+
+
+flash = RoboCar("Flash", (1,1), 0, 0)
+matrice = [["O" for _ in range(3)] for _ in range(3)]
+
+affichage(matrice, flash)
+root.mainloop()
