@@ -19,6 +19,17 @@ def creation(matrice:list, voiture:RoboCar, frm):
                 label.grid(column=i, row=j)
                 ligne.append(label)
         mat.append(ligne)
+    ligne = []
+    coo = ttk.Label(frm, text=f"Coordoonées de la voiture: {flash.coo}")
+    coo.grid(column=len(matrice)+1, row=0)
+    ligne.append(coo)
+    orientation = ttk.Label(frm, text=f"Orientation de la voiture: {flash.orientation()}")
+    orientation.grid(column=len(matrice)+1, row=1)
+    ligne.append(orientation)
+    mur = ttk.Label(frm, text="")
+    mur.grid(column=len(matrice)+1, row=2)
+    ligne.append(mur)
+    mat.append(ligne)
     return mat
 
 def actualiser(voiture:RoboCar, mat_ttk:list)->None:
@@ -140,16 +151,5 @@ frm = ttk.Frame(root, padding=10)
 frm.grid()
 
 mat_ttk = creation(matrice, flash, frm)
-ligne = []
-coo = ttk.Label(frm, text=f"Coordoonées de la voiture: {flash.coo}")
-coo.grid(column=len(matrice)+1, row=0)
-ligne.append(coo)
-orientation = ttk.Label(frm, text=f"Orientation de la voiture: {flash.orientation()}")
-orientation.grid(column=len(matrice)+1, row=1)
-ligne.append(orientation)
-mur = ttk.Label(frm, text="")
-mur.grid(column=len(matrice)+1, row=2)
-ligne.append(mur)
-mat_ttk.append(ligne)
 
 root.mainloop()
