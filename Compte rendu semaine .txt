@@ -1,0 +1,23 @@
+Compte rendu :
+Semaine 1:
+Lors de cette semaine, nous avons commencé la mise en place d’un environnement de simulation pour le contrôle d’un robot voiture.
+Nous avons choisi de modéliser l’environnement sous forme d’une matrice dans laquelle la voiture est représentée par une flèche indiquant son orientation.
+
+Deux programmes ont été développés :
+	•	Un programme affichant dans le terminal la position et l’orientation de la voiture dans la matrice.
+	•	Un programme utilisant la bibliothèque Tkinter permettant d’afficher graphiquement la voiture (sous forme de flèche) dans une fenêtre.
+
+Le contrôle de la voiture se fait à l’aide du clavier (flèches directionnelles), où chaque touche correspond à une action du robot (avancer, tourner, etc.).
+Pour structurer le projet, nous avons créé une classe RobotCar contenant les informations essentielles du robot (coordonnée,sens,etc.) ainsi qu’une fonction permettant de retourner la flèche correspondant à l’orientation actuelle du robot afin de l’afficher correctement.
+Cette semaine nous a permis de valider le principe de simulation et de poser les bases du contrôle du robot.
+
+Semaine 2:
+
+
+Cette semaine nous avons changé notre environnement de simulation vers Pygame pour surmonter les limitations de Tkinter et offrir une plus grande flexibilité dans les mouvements de la voiture.
+Nous avons modifié la classe RoboCar en ajoutant un attribut angle (de 0 à 360 degrés) et développé un programme draw_flash() où la voiture est représentée par un cercle avec un triangle indiquant sa direction. 
+Ensuite on a fait une autre fonction qui permet de :
+.Faire avancer la voiture dans sa direction actuelle (touche flèche haut)
+.La faire reculer (touche flèche bas)
+.La faire pivoter sur place de manière progressive (touches flèches gauche,droite)
+Pour l'implémentation d'une gestion des collisions avec les bords de la fenêtre si la voiture rencontre un bord, elle ne peut pas le traverser et reste à l'endroit où elle se trouvait juste avant.
