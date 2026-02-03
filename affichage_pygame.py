@@ -11,7 +11,7 @@ clock = pygame.time.Clock()
 
 def draw_flash(voiture):
     """
-    Dessine la voiture à l'écran."""
+    Ctte fonction dessine la voiture sur l'écran."""
     x, y = voiture.coo
     center = (int(x + 25), int(y + 25))
 
@@ -37,7 +37,7 @@ def draw_flash(voiture):
 
 def start_game():
     """
-    Fonction principale du programme qui initialise la voiture et gère les événements clavier"""
+    Cette fonction met à jour l’angle et la position de la voiture en fonction des touches pressées sur le clavier et  empêche la voiture de sortir de la fenêtre grâce à une détection de collision"""
     flash = RoboCar("Flash", (200, 200), 4, 0)
 
     rotation_speed = 3   
