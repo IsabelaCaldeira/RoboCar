@@ -19,18 +19,9 @@ def draw_flash(voiture):
 
     angle_rad = math.radians(voiture.a)
 
-    tip = (
-        center[0] + math.cos(angle_rad) * 15,
-        center[1] + math.sin(angle_rad) * 15
-    )
-    left = (
-        center[0] + math.cos(angle_rad + 2.5) * 12,
-        center[1] + math.sin(angle_rad + 2.5) * 12
-    )
-    right = (
-        center[0] + math.cos(angle_rad - 2.5) * 12,
-        center[1] + math.sin(angle_rad - 2.5) * 12
-    )
+    tip = (center[0] + math.cos(angle_rad) * 15, center[1] + math.sin(angle_rad) * 15)
+    left = (center[0] + math.cos(angle_rad + 2.5) * 12, center[1] + math.sin(angle_rad + 2.5) * 12)
+    right = (center[0] + math.cos(angle_rad - 2.5) * 12,center[1] + math.sin(angle_rad - 2.5) * 12)
 
     pygame.draw.polygon(screen, (255, 255, 255), [tip, left, right])
 
@@ -61,20 +52,13 @@ def start_game():
         angle_rad = math.radians(flash.a)
 
         if keys[K_UP]:
-            flash.coo = (
-                flash.coo[0] + math.cos(angle_rad) * flash.v,
-                flash.coo[1] + math.sin(angle_rad) * flash.v
-            )
+            flash.coo = (flash.coo[0] + math.cos(angle_rad) * flash.v,flash.coo[1] + math.sin(angle_rad) * flash.v)
 
         if keys[K_DOWN]:
-            flash.coo = (
-                flash.coo[0] - math.cos(angle_rad) * flash.v,
-                flash.coo[1] - math.sin(angle_rad) * flash.v
-            )
+            flash.coo = (flash.coo[0] - math.cos(angle_rad) * flash.v,flash.coo[1] - math.sin(angle_rad) * flash.v)
 
         # en cas de collision on garde les anciennes coordonnées
-        if (flash.coo[0] < 0 or flash.coo[1] < 0 or
-            flash.coo[0] + 50 > 500 or flash.coo[1] + 50 > 500):
+        if (flash.coo[0] < 0 or flash.coo[1] < 0 or flash.coo[0] + 50 > 500 or flash.coo[1] + 50 > 500):
             flash.coo = (old_x, old_y)
 
         screen.fill((0, 0, 0))
