@@ -7,7 +7,7 @@ class RoboCar(object):
         self.a = angle  # angle:int [0;360]
     def avancer(self, vitesse):
         """Avance la voiture selon son angle"""
-        angle_rad = math.radians(self.a)
+        angle_rad = math.radians(self.a) 
         x = self.coo[0] + math.cos(angle_rad) * vitesse
         y = self.coo[1] + math.sin(angle_rad) * vitesse
         self.coo = (x, y)
@@ -17,8 +17,8 @@ class RoboCar(object):
         x = self.coo[0] - math.cos(angle_rad) * vitesse
         y = self.coo[1] - math.sin(angle_rad) * vitesse
         self.coo = (x, y)
-    def Rotation(self):
-        """Tourne la voiture sur elle-même"""
-        #si self.v est negatif alors flash tourne a gauche 
-        #si self.v est positif alors flash tourne a droite
-        self.a = (self.a + self.v) % 360 #on veut que l'angle reste entre 0 et 360 donc on fait un modulo 360
+    def tourner_gauche(self, vitesse):
+        self.a = (self.a - vitesse) % 360 #on veut que l'angle reste entre 0 et 360 donc on fait un modulo 360
+
+    def tourner_droite(self, vitesse):
+        self.a = (self.a + vitesse) % 360
