@@ -12,8 +12,6 @@ Pour structurer le projet, nous avons créé une classe RobotCar contenant les i
 Cette semaine nous a permis de valider le principe de simulation et de poser les bases du contrôle du robot.
 
 Semaine 2:
-
-
 Cette semaine nous avons changé notre environnement de simulation vers Pygame pour surmonter les limitations de Tkinter et offrir une plus grande flexibilité dans les mouvements de la voiture.
 Nous avons modifié la classe RoboCar en ajoutant un attribut angle (de 0 à 360 degrés) et développé un programme draw_flash() où la voiture est représentée par un cercle avec un triangle indiquant sa direction. 
 Ensuite on a fait une autre fonction qui permet de :
@@ -21,3 +19,16 @@ Ensuite on a fait une autre fonction qui permet de :
 .La faire reculer (touche flèche bas)
 .La faire pivoter sur place de manière progressive (touches flèches gauche,droite)
 Pour l'implémentation d'une gestion des collisions avec les bords de la fenêtre si la voiture rencontre un bord, elle ne peut pas le traverser et reste à l'endroit où elle se trouvait juste avant.
+
+
+Semaine 3:
+Durant cette semaine on a rédui la dépendance de la voiture à la bibliothèque Pygame.
+L’objectif était de séparer la logique de déplacement de la voiture de son affichage graphique.
+On a ainsi déplacé les fonctionnalités principales de mouvement directement dans la classe RoboCar:
+-avancer
+-reculer
+-tourner_gauche
+-tourner_droite
+-collisions et contournement
+On a aussi créé une nouvelle classe Obstacle qui représente les éléments pouvant entrer en collision avec la voiture.
+
