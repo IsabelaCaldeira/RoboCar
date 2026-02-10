@@ -22,3 +22,10 @@ class RoboCar(object):
 
     def tourner_droite(self, vitesse):
         self.a = (self.a + vitesse) % 360
+
+    def trajectoire_carree(self, longueur):
+        """Fait avancer flash pour faire le trajectoire d'un carré"""
+        return [("avancer", longueur), ("tourner_droite", 90),
+                ("avancer", longueur), ("tourner_droite", 90),
+                ("avancer", longueur), ("tourner_droite", 90),
+                ("avancer", longueur), ("tourner_droite", 90),]
