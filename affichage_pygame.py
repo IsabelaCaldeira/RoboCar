@@ -36,6 +36,11 @@ def main():
 
     v_rotation= 3
     running = True
+    obstacles = [
+    Obstacle("rectangle", (100, 150), (80, 50)),
+    Obstacle("rectangle", (300, 200), (50, 50))
+]
+
     while running:
         clock.tick(60)
 
@@ -57,6 +62,11 @@ def main():
         if keys[K_DOWN]:
             flash.reculer()
 
+        for obs in obstacles:
+            if flash.collision(obs):
+                flash.Contourne(flash.coo, flash.a, obstacles)
+                return
+
         # collision avec le mur
         if (flash.coo[0] < 0 or flash.coo[1] < 0 or
             flash.coo[0] + 50 > 500 or flash.coo[1] + 50 > 500):
@@ -66,7 +76,9 @@ def main():
 
         screen.fill((0, 0, 0))
         draw_flash(flash)
+        draw_obstacles(obstacles)
         pygame.display.update()
+
 
     pygame.quit()
 
