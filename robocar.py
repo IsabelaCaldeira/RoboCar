@@ -25,7 +25,6 @@ class RoboCar(object):
 
     def tourner_droite(self, vitesse):
         self.a = (self.a + vitesse) % 360
-
     def collision(self, obstacle):
         """Cette fonction verifie si la voiture entre en collision avec un obstacle"""
         x1, y1 = self.coo #coordonnées du robot
@@ -39,13 +38,14 @@ class RoboCar(object):
             y1 < y2 + h2 and
             y1 + h1 > y2
         )
+    
     def Contourne(self, coord, angle, obstacles):
         "cette fonction fait tourner la voiture jusqu'à ce qu'elle puisse avancer sans collision"
         self.coo = coord
         self.a = angle
-
         for obs in obstacles:
             if self.collision(obs):
                 self.tourner_droite(5)
                 self.avancer()
                 return
+    
