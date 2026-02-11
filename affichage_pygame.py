@@ -11,8 +11,6 @@ screen = pygame.display.set_mode((LARGEUR,HAUTEUR))
 pygame.display.set_caption("Flash Run")
 clock = pygame.time.Clock()
 
-
-
 def draw_flash(voiture):
     """Cette fonction dessine la voiture sur l'écran"""
     x, y = voiture.coo
@@ -28,7 +26,7 @@ def draw_flash(voiture):
 def draw_obstacles(obstacles):
     """Cette fonction dessine les obstacles sur l'écran"""
     for obs in obstacles:
-        x, y = obs.pos
+        x, y = obs.pos_aleatoire()
         w, h = obs.dim
         pygame.draw.rect(screen, (200, 0, 0), (x, y, w, h))
 
@@ -40,8 +38,8 @@ def main():
     v_rotation= 3
     running = True
     obstacles = [
-        Obstacle("rectangle", (100, 150), (80, 50)),
-        Obstacle("rectangle", (300, 200), (50, 50))
+        Obstacle("rectangle", (0, 0), (80, 50)),
+        Obstacle("rectangle", (0, 0), (50, 50))
     ]
 
     while running:
@@ -67,7 +65,7 @@ def main():
 
         for obs in obstacles:
             if flash.collision(obs):
-                flash.Contourne(flash.coo, flash.a, obstacles)
+                flash.contourne(flash.coo, flash.a, obstacles)
                 break
 
         flash.mur_collision(LARGEUR,HAUTEUR, (old_x, old_y))
