@@ -11,6 +11,7 @@ screen = pygame.display.set_mode((LARGEUR,HAUTEUR))
 pygame.display.set_caption("Flash Run")
 clock = pygame.time.Clock()
 
+
 def draw_flash(voiture):
     """Cette fonction dessine la voiture sur l'écran"""
     x, y = voiture.coo
