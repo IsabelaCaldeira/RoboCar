@@ -21,3 +21,10 @@ class RoboCar:
     def get_wheel_speeds(self):
         """Recuperer la vitesse des roues"""
         return self.v_l, self.v_r
+    def set_vitesse_gauche(self, v):
+        """Modifier la vitesse du roue gauche"""
+        self.v_l = v
+
+    def set_vitesse_droite(self, v):
+        """Modifier la vitesse du roue droite"""
+        self.v_r = v
