@@ -1,6 +1,4 @@
 import math
-
-
 class RoboCar:
     WHEEL_BASE = 50  # distance entre roues 
 
@@ -39,3 +37,12 @@ class RoboCar:
         self.x += v * math.cos(self.angle) * dt
         self.y += v * math.sin(self.angle) * dt
         self.angle += w * dt #si w<0 on tourne a droite et a gauche sinon
+    def distance_obstacle(self, obstacles, max_range=120):
+        """Cette fonction regarde l'obstacle le plus proche"""
+        min_dist = max_range #distance minimale
+
+        # vecteur direction du robot
+        dir_x = math.cos(self.angle)
+        dir_y = math.sin(self.angle)
+
+        
