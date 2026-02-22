@@ -45,4 +45,12 @@ class RoboCar:
         dir_x = math.cos(self.angle)
         dir_y = math.sin(self.angle)
 
-        
+        for obs in obstacles:
+
+            ox, oy = obs.pos
+            dx = ox - self.x #on cree un vecteur du robot vers l’obstacle
+            dy = oy - self.y
+
+            # projection dans la direction du robot
+            projection = dx * dir_x + dy * dir_y #produit scalaire
+
