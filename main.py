@@ -10,17 +10,11 @@ LARGEUR = 800
 HAUTEUR = 600
 FPS = 60
 
-def main():
-    affichage = Affichage()
+affichage = Affichage(LARGEUR, HAUTEUR)
+sim = Simulation(LARGEUR, HAUTEUR)#on cree la simulation qui contient le robot,les obstacles
+strat = Deplacement(sim) #on cree la stratégie qui reçoit la simulation
 
-    robot = RoboCar("Flash", (400, 300), 0)
-    obstacles = [
-        Obstacle("rectangle", (100, 100), (80, 100)),
-        Obstacle("rectangle", (500, 200), (100, 50)),
-        Obstacle("rectangle", (300, 450), (50, 50)),
-    ]
-    sim = Simulation(robot, obstacles, LARGEUR, HAUTEUR) #on cree la simulation qui contient le robot,les obstacles
-    strat = Deplacement(sim) #on cree la stratégie qui reçoit la simulation
+def main():
     running = True
     mouvement_lineaire= False
     while running:
@@ -36,7 +30,7 @@ def main():
         if a_collision:
             strat.tourner_sur_place(60)
 
-        affichage.update(robot, obstacles)
+        affichage.update(sim.robot, sim.obstacles)
 
     affichage.stop()
 

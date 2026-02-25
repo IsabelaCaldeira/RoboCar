@@ -1,9 +1,15 @@
 import math
+from robocar import RoboCar
+from obstacle import Obstacle
 
 class Simulation():
-    def __init__(self, robot, obstacles, largeur, hauteur):
-        self.robot = robot
-        self.obstacles = obstacles
+    def __init__(self, largeur, hauteur):
+        self.robot = RoboCar("Flash", (400, 300), 0)
+        self.obstacles = [
+        Obstacle("rectangle", (100, 100), (80, 100)),
+        Obstacle("rectangle", (500, 200), (100, 50)),
+        Obstacle("rectangle", (300, 450), (50, 50)),
+    ]
         self.largeur = largeur
         self.hauteur = hauteur
     

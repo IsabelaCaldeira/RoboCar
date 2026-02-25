@@ -1,18 +1,10 @@
 import pygame
 import math
 
-from robocar import RoboCar
-from obstacle import Obstacle
-from simulation import Simulation
-from strategies import Deplacement
-
-LARGEUR = 800
-HAUTEUR = 600
-
 class Affichage():
-    def __init__(self):
+    def __init__(self, largeur, hauteur):
         pygame.init()
-        self.screen = pygame.display.set_mode((LARGEUR, HAUTEUR))
+        self.screen = pygame.display.set_mode((largeur, hauteur))
         pygame.display.set_caption("Flash car")
         self.clock = pygame.time.Clock()
 
