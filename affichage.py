@@ -60,7 +60,7 @@ class Affichage():
         return pygame.event.get()
 
     def stop(self):
-        pygame.qui()
+        pygame.quit()
 
 
 

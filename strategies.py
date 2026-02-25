@@ -35,7 +35,7 @@ class Deplacement:
         # aléatoire ou constante pour qu'il ne reste pas sur une ligne droite infinie
         self.avancer(vitesse_avance)
             
-    def avancer_x_metres(self, distance, vitesse):
+    def avancer_x_metres(self, distance, vitesse): 
         """Fait avancer le robot d'une distance donnée en mètres à une vitesse donnée."""
         distance_pixels = distance * 100 # Convertir la distance en pixels
         if self.depart is None: #Si c'est le premier appel, on memorise le point de depart
@@ -57,3 +57,4 @@ class Deplacement:
         return False #le robot continue d'avancer
     
 
+    

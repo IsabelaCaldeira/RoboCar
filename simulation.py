@@ -96,7 +96,7 @@ class Simulation():
                 self.robot.x, self.robot.y = old_state
                 return True
         return False
-
+#dictionnaire avec qui on a une collision
     def update(self, dt):
         """Met à jour le robot et l'environnement."""
         old_state = (self.robot.x, self.robot.y)
@@ -104,3 +104,4 @@ class Simulation():
         self.appliquer_murs()
         a_collision = self.resoudre_collisions(old_state)
         return a_collision
+    #variable qui denote si coliision ou pas et la teste a l 'esxterieur si collision on arrete
