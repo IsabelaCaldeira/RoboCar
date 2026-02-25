@@ -12,9 +12,14 @@ class RoboCar:
         self.vR = 0 #vitesse roue droite
         self.largeur = 40   # largeur (cote roues)
         self.longueur = 60  # longueur (avant/arriere)
+        
     def get_state(self):
         """Recuperer l'etat du robot"""
         return self.x, self.y, self.angle
+    
+    def get_wheel_speeds(self):
+        return self.robot.vG, self.robot.vR
+        
     def set_vitesse_gauche(self, v):
         """Modifier la vitesse du roue gauche"""
         self.vG = v

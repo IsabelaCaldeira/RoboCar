@@ -12,6 +12,7 @@ class Simulation():
     ]
         self.largeur = largeur
         self.hauteur = hauteur
+    
     def distance_obstacle(self, max_range=140):
      min_dist = max_range
      dir_x = math.cos(self.robot.angle)
