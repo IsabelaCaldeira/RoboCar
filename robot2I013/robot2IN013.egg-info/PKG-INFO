@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: robot2IN013
+Version: 1.2022.0
+Summary: Module pour le controleur du Robot GoPiGo3 pour le cours 2IN013-Robot
+Home-page: https://github.com/baskiotisn/2IN013robot2022
+Author: Nicolas Baskiotis
+Author-email: nicolas.baskiotis@sorbonne-universite.fr
+License: MIT
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: home-page
+Dynamic: license
+Dynamic: summary
+
+Module 2IN013-Robot
