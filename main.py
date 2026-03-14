@@ -1,9 +1,5 @@
-import pygame
-
-from robocar import RoboCar
-from obstacle import Obstacle
 from simulation import Simulation
-from strategies import Deplacement
+from strategies import GestionStrategies
 from affichage import Affichage
 
 LARGEUR = 800
@@ -11,30 +7,22 @@ HAUTEUR = 600
 FPS = 60
 
 affichage = Affichage(LARGEUR, HAUTEUR)
-sim = Simulation(LARGEUR, HAUTEUR)#on cree la simulation qui contient le robot,les obstacles
-strat = Deplacement(sim,sim.robot) #on cree la stratégie qui reçoit la simulation
+sim = Simulation(LARGEUR, HAUTEUR)
+strat = GestionStrategies(sim)
+
 
 def main():
-    mouvement_lineaire= False
     running = True
-    while running:
-        dt = affichage.clock.tick(FPS) / 1000.0
-        for event in affichage.events():
-            if event.type == pygame.QUIT:
-                running = False
-        if not mouvement_lineaire:
-            
-            mouvement_lineaire = strat.avancer_x_metres(1, 80)
-        else:
-            sim.eviter_obstacles(80, 60, 30) #on decide quoi faire (avancer,tourner) le robot ne bouge pas la mais on regle sa vitesse seulement
-        
-        a_collision = sim.update(dt) #c'est a que le robot bouge réellement
-        if a_collision:
-            sim.tourner_sur_place(60)
 
-        affichage.update(sim.robot, sim.obstacles)
+    while running:
+        dt = affichage.clock.tick(FPS) / 1000.0 #le temps ecoule entre deux mises a jour
+        #clock.tick(FPS) sert a controler la vitesse du programme (alors pygame va essayer de faire 60 images par seconde) et renvoie le temps ecoule depuis la derniere frame en millisecondes et on le divise par 10000 pour que ca soit en secondes
+        strat.update(dt) #le robot decide quoi faire
+        sim.update(dt) # on applique le mouvement reel du robot
+        running = affichage.update(sim.robot, sim.obstacles, dt) #on dessine le robot et les obstacles et on recupere l'etat de la fenetre
 
     affichage.stop()
+
 
 if __name__ == "__main__":
     main()
