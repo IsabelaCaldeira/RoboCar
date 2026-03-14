@@ -79,3 +79,25 @@ class Reculer:
         self.depart = None
         self.actif = True
 
+    def update(self, dt):
+
+        # si la strategie n'est pas active
+        if not self.actif:
+            return True
+        distance_pixels = self.distance * 100
+        if self.depart is None: 
+            self.depart = (self.sim.robot.x, self.sim.robot.y)  # memorisation de la position de départ
+
+        self.sim.reculer(self.vitesse)  # on fait reculer le robot
+
+        # calcul distance parcourue
+        dx = self.sim.robot.x - self.depart[0]
+        dy = self.sim.robot.y - self.depart[1]
+        distance_parcourue = math.sqrt(dx**2 + dy**2)
+
+        if distance_parcourue >= distance_pixels: # si la distance est atteinte
+            self.sim.freiner(dt)
+            self.actif = False
+            return True
+
+        return False
