@@ -38,3 +38,11 @@ Nous avons donc décidé de réorganiser l’architecture du projet en séparant
 L’objectif est d’améliorer la clarté du code.
 Aussi nous avons commencé à réfléchir à l’implémentation de différentes stratégies de déplacement pour permettre au robot d’agir de manière autonome.
 Notre objectif pour la semaine prochaine est de permettre au robot de se déplacer seul sans l'aide du clavier en utilisant une stratégie de navigation définie.
+
+Semaine 6:
+Durant cette séance, nous avons poursuivi la réorganisation de l’architecture du projet afin d’améliorer la structure du code
+Nous avons décidé de placer dans le fichier strategies.py différentes classes représentant les comportements possibles du robot
+Nous avons également constaté que le fichier main.py contenait trop de responsabilités. Nous avons donc décidé de limiter son rôle à la gestion de la simulation 
+L’affichage sera séparé et placé dans une classe dédiée
+Cette organisation permettra de mieux séparer les différentes parties du programme : logique du robot, stratégies de comportement et affichage
+Notre objectif pour la prochaine séance est d’obtenir un code mieux organisé, réparti dans plusieurs fichiers et classes, et d’ajouter des fonctions update afin de gérer les mises à jour de la simulation
