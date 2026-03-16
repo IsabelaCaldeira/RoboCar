@@ -122,7 +122,7 @@ class Simulation:
             projection = dx * dir_x + dy * dir_y
 
             if 0 < projection < max_range:
-                dist = math.sqrt(dx*2 + dy*2) - max(obs.dim) / 2
+                dist = math.sqrt(dx**2 + dy**2) - max(obs.dim) / 2
                 min_dist = min(min_dist, max(0, dist))
 
         return min_dist
@@ -153,7 +153,7 @@ class Simulation:
             projection = dx * dir_x + dy * dir_y
 
             if 0 < projection < max_range:
-                dist = math.sqrt(dx*2 + dy*2) - max(obs.dim) / 2
+                dist = math.sqrt(dx**2 + dy**2) - max(obs.dim) / 2
                 min_dist = min(min_dist, max(0, dist))
 
         return min_dist
