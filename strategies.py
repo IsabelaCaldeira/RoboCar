@@ -121,6 +121,11 @@ class EviterObstacles:
         """Calcule la distance minimale à garder avant d'agir"""
         #un seuil fixe; une marge liée à la vitesse et au temps de réaction; la demi-longueur du robot pour éviter le contact
         return max(self.seuil, self.vitesse_avance * dt * 2.5 + self.sim.robot.longueur/2) 
+    
+    def choisir_direction(self, dist_gauche, dist_droite):
+        """Choisit la direction avec le plus d'espace"""
+        if self.direction is None:
+            self.direction = "gauche" if dist_gauche > dist_droite else "droite"
 
     def update(self, dt):
         dist_obs = self.sim.distance_obstacle(max_range=140)  # distance a l'obstacle devant
