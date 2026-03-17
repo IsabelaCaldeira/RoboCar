@@ -25,50 +25,6 @@ class Simulation:
         self.hauteur = hauteur
         self.a_collision = False # booleen indiquant si le robot a rencontre un obstacle
 
-    def avancer(self, vitesse):
-        """Fait avancer le robot tout droit.
-        """
-        self.robot.set_vitesse_gauche(vitesse) #les deux roues doivent avoir la memee vitesse pour avancer en ligne droite
-        self.robot.set_vitesse_droite(vitesse)
-
-    def reculer(self, vitesse):
-        """Fait reculer le robot
-        """
-        self.robot.set_vitesse_gauche(-vitesse)
-        self.robot.set_vitesse_droite(-vitesse)
-    def tourner_sur_place(self, vitesse):
-        """Fait tourner le robot sur lui-même
-        """
-        self.robot.set_vitesse_gauche(vitesse) #Une roue avance et l'autre recule
-        self.robot.set_vitesse_droite(-vitesse)
-
-    def tourner_gauche(self, vitesse):
-        """
-        Fait tourner le robot vers la gauche 
-        """
-        self.robot.set_vitesse_gauche(vitesse)
-        self.robot.set_vitesse_droite(0)
-
-    def tourner_droite(self, vitesse):
-        """
-        Fait tourner le robot vers la droite 
-        """
-        self.robot.set_vitesse_gauche(0)
-        self.robot.set_vitesse_droite(vitesse)
-    def freiner(self, dt, deceleration=120): #deceleration correspond a l'intensite du freinage
-        """Reduit progressivement les vitesses des roues vers 0
-        """
-        pas = deceleration * dt # quantite de vitesse retiree pendant cette frame
-        # freinage roue gauche
-        if self.robot.vG > 0:
-            self.robot.vG = max(0, self.robot.vG - pas)
-        elif self.robot.vG < 0:
-            self.robot.vG = min(0, self.robot.vG + pas)
-        # freinage roue droite
-        if self.robot.vR > 0:
-            self.robot.vR = max(0, self.robot.vR - pas)
-        elif self.robot.vR < 0:
-            self.robot.vR = min(0, self.robot.vR + pas)
             
     def distance_obstacle(self, max_range=140): #max_range c'est la portee maximale du capteur (en pixels)
         """
@@ -100,6 +56,7 @@ class Simulation:
                     min_dist = max(0, dist_au_bord)
 
         return min_dist
+    
     def distance_cote_gauche(self, max_range=60):
         """Calcule la distance libre sur le cote gauche du robot
         Cette fonction sert a savoir si le robot peut tourner a gauche
@@ -129,6 +86,7 @@ class Simulation:
                 min_dist = min(min_dist, max(0, dist))
 
         return min_dist
+    
     def distance_cote_droite(self, max_range=60):
         """
         Calcule la distance libre sur le cote droit du robot

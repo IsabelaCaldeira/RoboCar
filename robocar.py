@@ -33,6 +33,53 @@ class RoboCar:
         v = (self.vR + self.vG) / 2
         w = (self.vR - self.vG) / self.WHEEL_BASE #c'est le theoreme de Thales applique au cercle de rotation
         return v, w
+    
+    def avancer(self, vitesse):
+        """Fait avancer le robot tout droit.
+        """
+        self.robot.set_vitesse_gauche(vitesse) #les deux roues doivent avoir la memee vitesse pour avancer en ligne droite
+        self.robot.set_vitesse_droite(vitesse)
+
+    def reculer(self, vitesse):
+        """Fait reculer le robot
+        """
+        self.robot.set_vitesse_gauche(-vitesse)
+        self.robot.set_vitesse_droite(-vitesse)
+           
+    def tourner_sur_place(self, vitesse):
+        """Fait tourner le robot sur lui-même
+        """
+        self.robot.set_vitesse_gauche(vitesse) #Une roue avance et l'autre recule
+        self.robot.set_vitesse_droite(-vitesse)
+
+    def tourner_gauche(self, vitesse):
+        """
+        Fait tourner le robot vers la gauche 
+        """
+        self.robot.set_vitesse_gauche(vitesse)
+        self.robot.set_vitesse_droite(0)
+
+    def tourner_droite(self, vitesse):
+        """
+        Fait tourner le robot vers la droite 
+        """
+        self.robot.set_vitesse_gauche(0)
+        self.robot.set_vitesse_droite(vitesse)
+        
+    def freiner(self, dt, deceleration=120): #deceleration correspond a l'intensite du freinage
+        """Reduit progressivement les vitesses des roues vers 0
+        """
+        pas = deceleration * dt # quantite de vitesse retiree pendant cette frame
+        # freinage roue gauche
+        if self.robot.vG > 0:
+            self.robot.vG = max(0, self.robot.vG - pas)
+        elif self.robot.vG < 0:
+            self.robot.vG = min(0, self.robot.vG + pas)
+        # freinage roue droite
+        if self.robot.vR > 0:
+            self.robot.vR = max(0, self.robot.vR - pas)
+        elif self.robot.vR < 0:
+            self.robot.vR = min(0, self.robot.vR + pas)
 
     def update(self, dt):
         """Mise a jour du robot"""

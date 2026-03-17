@@ -21,16 +21,13 @@ class AvancerXMetres:
         Fonction appelee a chaque frame qui fait avancer le robot et verifie si la distance demandee a ete parcourue
         """
 
+        #Transformer en fonction
         if self.terminee:
+            self.robot.avanceer(0)
             return True
         distance_pixels = self.distance * 100  # conversion de metres en pixels (1 metre=100 pixels)
         if self.depart is None:
             self.depart = (self.sim.robot.x, self.sim.robot.y) # on memorise la position de depart la premiere fois
-
-        if self.sim.distance_mur(max_range=60) < self.marge_mur: #si on est trop proche d'un mur on arrete
-            self.sim.freiner(dt)
-            self.terminee = True
-            return True
 
         self.sim.avancer(self.vitesse) # on fait avancer le robot
 
@@ -39,7 +36,7 @@ class AvancerXMetres:
         dy = self.sim.robot.y - self.depart[1]
         distance_parcourue = math.sqrt(dx**2 + dy**2)
 
-        # si on a atteint la distance voulue
+        # si on a atteint la distance voulue (serait replacer dans la fonction terminee)
         if distance_parcourue >= distance_pixels:
             self.sim.freiner(dt)
             self.terminee = True
@@ -117,35 +114,50 @@ class EviterObstacles:
         self.seuil = seuil # distance a partir de laquelle on considere qu'un obstacle est proche
         self.direction = None  # direction choisie pour contourner
 
+    def distance_securite(self,dt):
+        """Calcule la distance minimale à garder avant d'agir"""
+        #un seuil fixe; une marge liée à la vitesse et au temps de réaction; la demi-longueur du robot pour éviter le contact
+        return max(self.seuil, self.vitesse_avance * dt * 2.5 + self.sim.robot.longueur/2) 
+    
+    def choisir_direction(self, dist_gauche, dist_droite):
+        """Choisit la direction avec le plus d'espace"""
+        if self.direction is None:
+            self.direction = "gauche" if dist_gauche > dist_droite else "droite"
+
+    def tourner_direction(self):
+        """Applique une rotation selon la direction choisie"""
+        if self.direction == "gauche":
+            self.sim.tourner_gauche(self.vitesse_tourne)
+        else:
+            self.sim.tourner_droite(self.vitesse_tourne)
+
+    def agir_si_proche(self, distance, dist_gauche, dist_droite, dt):
+        """Agit si un obstacle est détecté à une distance inférieure à la distance de sécurité"""
+        self.choisir_direction(dist_gauche, dist_droite) #choisir la direction selon l'espace disponible
+        d_sec = self.distance_securite(dt) #calculer la distance de sécurité nécessaire selon la vitesse et le temps
+        if distance < d_sec * 0.5: # si l'obstacle est très proche
+            self.sim.reculer(self.vitesse_avance * 0.6) #flash recule un peu pour se dégager
+            return True
+        if distance < d_sec : # si l'obstacle est proche mais pas critique
+            self.tourner_direction() #flash tourne dans la direction choisie
+            return True
+        return False #si l'obstacle est suffisamment loin, aucune action n'est nécessaire
+
     def update(self, dt):
-        dist_obs = self.sim.distance_obstacle(max_range=140)  # distance a l'obstacle devant
-        dist_mur = self.sim.distance_mur(max_range=70) # distance au mur devant
+        dist_obs = self.sim.distance_obstacle(max_range=200)  # distance a l'obstacle devant
+        dist_mur = self.sim.distance_mur(max_range=120) # distance au mur devant
         # distances sur les cotes
         dist_gauche = self.sim.distance_cote_gauche(max_range=60)
         dist_droite = self.sim.distance_cote_droite(max_range=60)
         # on prend la distance la plus dangereuse
         distance = min(dist_obs, dist_mur)
     
-        if distance < self.seuil:  # obstacle detecte devant
+        if self.agir_si_proche(distance, dist_gauche, dist_droite, dt):
+            return False
 
-          
-            if self.direction is None:  # on choisit une direction si ce n'est pas deja fait
-                if dist_gauche > dist_droite:  # on choisit le cote avec le plus d'espace
-                    self.direction = "gauche"
-                else:
-                    self.direction = "droite"
-
-            # rotation selon la direction choisie
-            if self.direction == "gauche":
-                self.sim.tourner_gauche(self.vitesse_tourne)
-            else:
-                self.sim.tourner_droite(self.vitesse_tourne)
-
-        else:
-            # si aucun obstacle alors on avance
-            self.direction = None
-            self.sim.avancer(self.vitesse_avance)
-
+        # si aucun obstacle alors on avance
+        self.direction = None
+        self.sim.avancer(self.vitesse_avance)
         return False
 
 
@@ -161,7 +173,7 @@ class GestionStrategies:
         self.avance_depart = AvancerXMetres(simulation, distance=1, vitesse=80)
         self.freinage = FreinageProgressif(simulation)
         self.recul = Reculer(simulation, vitesse=50, distance=0.4)
-        self.evitement = EviterObstacles(simulation, vitesse_avance=80, vitesse_tourne=60, seuil=50)
+        self.evitement = EviterObstacles(simulation, vitesse_avance=80, vitesse_tourne=60, seuil=80)
 
         self.phase = "DEPART" # etat actuel du robot
 
