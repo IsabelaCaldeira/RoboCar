@@ -26,5 +26,7 @@ $ python3 -m pip install -e .
 # Have Fun :)
 $ python3 main.py
 
+#Executer unit_test.py depuis la racine 
+$ python -m roboCar.unit_test
 ```
 
