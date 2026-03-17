@@ -76,7 +76,7 @@ class RoboCar:
         if self.vG > 0:
             self.vG = max(0, self.vG - pas)
         elif self.vG < 0:
-            self.G = min(0, self.vG + pas)
+            self.vG = min(0, self.vG + pas)
         # freinage roue droite
         if self.vR > 0:
             self.vR = max(0, self.vR - pas)
