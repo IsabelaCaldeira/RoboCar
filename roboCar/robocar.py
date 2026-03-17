@@ -74,14 +74,14 @@ class RoboCar:
         pas = deceleration * dt # quantite de vitesse retiree pendant cette frame
         # freinage roue gauche
         if self.vG > 0:
-            self.vG = max(0, self.robot.vG - pas)
+            self.vG = max(0, self.vG - pas)
         elif self.vG < 0:
-            self.G = min(0, self.robot.vG + pas)
+            self.G = min(0, self.vG + pas)
         # freinage roue droite
         if self.vR > 0:
-            self.vR = max(0, self.robot.vR - pas)
+            self.vR = max(0, self.vR - pas)
         elif self.vR < 0:
-            self.vR = min(0, self.robot.vR + pas)
+            self.vR = min(0, self.vR + pas)
 
     def update(self, dt):
         """Mise a jour du robot"""

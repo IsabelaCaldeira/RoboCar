@@ -55,7 +55,7 @@ class FreinageProgressif:
         self.sim = simulation
 
     def update(self, dt):
-        self.sim.freiner(dt)  # on applique le freinage progressif
+        self.sim.robot.freiner(dt)  # on applique le freinage progressif
         vG, vR = self.sim.robot.get_wheel_speeds() # on recupere la vitesse des deux roues
         return abs(vG) < 1 and abs(vR) < 1 # si les vitesses sont presque nulles alors le robot est arrete
 
