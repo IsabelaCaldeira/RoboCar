@@ -1,6 +1,4 @@
-from roboCar.simulation import Simulation
-from roboCar.strategies import GestionStrategies
-from roboCar.affichage import Affichage
+from roboCar import Simulation, GestionStrategies, Affichage
 
 
 LARGEUR = 800
