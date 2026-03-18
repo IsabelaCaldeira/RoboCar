@@ -23,10 +23,10 @@ $ cd robot2I013
 # Installer le package
 $ python3 -m pip install -e .
 
-# Have Fun :)
+# Depuis la racine, execute pour regarder Flash
 $ python3 main.py
 
-#Executer unit_test.py depuis la racine 
+#Ou fairer des tests ;)
 $ python -m roboCar.unit_test
 ```
 
