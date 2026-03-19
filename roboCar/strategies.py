@@ -1,49 +1,41 @@
 import math
-
 class AvancerXMetres:
     """
     Strategie qui fait avancer le robot d'une distance donnee
     Le robot avance jusqu'a ce que la distance parcourue atteigne la distance demandee (en metres)
     """
 
-    def __init__(self, simulation, distance, vitesse, marge_mur=35):
+    def _init_(self, simulation, distance, vitesse, marge_mur=35):
         self.sim = simulation      # reference vers la simulation 
         self.distance = distance   # distance a parcourir en metres
         self.vitesse = vitesse     # vitesse des roues
         self.marge_mur = marge_mur # distance minimale autorisee avec un mur
 
         self.depart = None         # position de depart du robot
-        self.terminee = False      # indique si la strategie est terminee
 
-    def update(self):
-        """
-        Fonction appelee a chaque frame qui fait avancer le robot et verifie si la distance demandee a ete parcourue
-        """
+    def start(self):
+        self.depart = None
 
-        #Transformer en fonction
-        if self.terminee:
-            self.sim.robot.arreter()
-            return True
-        distance_pixels = self.distance * 100  # conversion de metres en pixels 
+    def step(self):
         if self.depart is None:
-            self.depart = (self.sim.robot.x, self.sim.robot.y) # on memorise la position de depart la premiere fois
+            self.depart = (self.sim.robot.x, self.sim.robot.y)
 
-        self.sim.robot.avancer(self.vitesse) # on fait avancer le robot
+        if self.stop():
+            self.sim.robot.arreter()
+            return
 
-        # calcul de la distance parcourue depuis le depart
+        self.sim.robot.avancer(self.vitesse)
+
+    def stop(self):
+        distance_pixels = self.distance * 100
+        if self.depart is None:
+            return False
         dx = self.sim.robot.x - self.depart[0]
         dy = self.sim.robot.y - self.depart[1]
-        distance_parcourue = math.sqrt(dx**2 + dy**2)
-
-        # si on a atteint la distance voulue (serait replacer dans la fonction terminee)
-        if distance_parcourue >= distance_pixels:
-            self.sim.robot.arreter()
-            self.terminee = True
-            return True
-
-        return False
+        distance_parcourue = math.sqrt(dx*2 + dy*2)
+        return distance_parcourue >= distance_pixels
     
-#Il faut finir classe TournerXDegree
+#Il faut creer une nouvelle classe TournerXDegree
 class TournerXDegrees:
     """ Strategie qui fait tourner le robot d'un angle donnee
     Le robot tourne jusqu'a ce que la distance parcourue atteigne la distance demandee (en metres)
