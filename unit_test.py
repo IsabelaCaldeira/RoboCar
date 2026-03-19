@@ -1,24 +1,13 @@
 import unittest
 import math
-<<<<<<< HEAD
 from roboCar import (
     RoboCar,
     Simulation,
-=======
-
-from .roboCar.robocar import RoboCar
-from .roboCar.simulation import Simulation
-from .roboCar.strategies import (
->>>>>>> 2bcb7c92c54cce82695d36d38a8e67af139e51fc
     AvancerXMetres,
     Reculer,
     FreinageProgressif,
     EviterObstacles,
-<<<<<<< HEAD
     GestionStrategies,
-=======
-    GestionStrategies
->>>>>>> 2bcb7c92c54cce82695d36d38a8e67af139e51fc
 )
 
 
@@ -71,11 +60,11 @@ class TestRoboCar(unittest.TestCase):
         self.assertEqual(self.robot.vG, 0)
         self.assertEqual(self.robot.vR, 50)
 
-    def test_freiner(self):
+    def test_arreter(self):
         self.robot.vG = 100
         self.robot.vR = 100
 
-        self.robot.freiner(1)
+        self.robot.arreter()
 
         self.assertEqual(self.robot.vG, 0)
         self.assertEqual(self.robot.vR, 0)

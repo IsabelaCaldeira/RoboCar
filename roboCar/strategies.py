@@ -192,7 +192,7 @@ class GestionStrategies:
         """
         if self.phase == "DEPART": # phase de depart
 
-            fini = self.avance_depart.update(dt)
+            fini = self.avance_depart.update()
 
             if fini:
                 self.phase = "EVITEMENT"

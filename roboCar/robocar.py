@@ -71,23 +71,9 @@ class RoboCar:
     def arreter(self): #deceleration correspond a l'intensite du freinage
         """Reduit la vitesse du robot à 0
         """
-<<<<<<< HEAD
-        pas = deceleration * dt # quantite de vitesse retiree pendant cette frame
-        # freinage roue gauche
-        if self.vG > 0:
-            self.vG = max(0, self.vG - pas)
-        elif self.vG < 0:
-            self.vG = min(0, self.vG + pas)
-        # freinage roue droite
-        if self.vR > 0:
-            self.vR = max(0, self.vR - pas)
-        elif self.vR < 0:
-            self.vR = min(0, self.vR + pas)
-=======
         self.set_vitesse_droite(0)
         self.set_vitesse_gauche(0)
         
->>>>>>> 2bcb7c92c54cce82695d36d38a8e67af139e51fc
 
     def update(self, dt):
         """Mise a jour du robot"""
