@@ -120,15 +120,27 @@ class EviterObstacles:
             return True
         return False #si l'obstacle est suffisamment loin, aucune action n'est nécessaire
 
-
-
-
-
-    def distance_securite(self,dt):
-        """Calcule la distance minimale à garder avant d'agir"""
-        #un seuil fixe; une marge liée à la vitesse et au temps de réaction; la demi-longueur du robot pour éviter le contact
-        return max(self.seuil, self.vitesse_avance * dt * 2.5 + self.sim.robot.longueur/2) 
+    def step(self):
+        dist_obs = self.sim.distance_obstacle(max_range=120)  # distance a l'obstacle devant
+        dist_mur = self.sim.distance_mur(max_range=120) # distance au mur devant
+        dist_gauche = self.sim.distance_cote_gauche(max_range=60)
+        dist_droite = self.sim.distance_cote_droite(max_range=60)
+        #on prend la distance la plus dangereuse
+        distance = min(dist_obs, dist_mur)
     
+        if self.agir_si_proche(distance, dist_gauche, dist_droite):
+            return False
+
+        #si aucun obstacle alors on avance
+        self.direction = None
+        self.sim.robot.avancer(self.vitesse_avance)
+        return False
+    
+    def stop(self):
+        return False
+    
+
+
 
 
     
