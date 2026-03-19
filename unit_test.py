@@ -1,13 +1,24 @@
 import unittest
 import math
+<<<<<<< HEAD
 from roboCar import (
     RoboCar,
     Simulation,
+=======
+
+from .roboCar.robocar import RoboCar
+from .roboCar.simulation import Simulation
+from .roboCar.strategies import (
+>>>>>>> 2bcb7c92c54cce82695d36d38a8e67af139e51fc
     AvancerXMetres,
     Reculer,
     FreinageProgressif,
     EviterObstacles,
+<<<<<<< HEAD
     GestionStrategies,
+=======
+    GestionStrategies
+>>>>>>> 2bcb7c92c54cce82695d36d38a8e67af139e51fc
 )
 
 

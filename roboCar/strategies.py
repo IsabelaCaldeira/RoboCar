@@ -15,14 +15,14 @@ class AvancerXMetres:
         self.depart = None         # position de depart du robot
         self.terminee = False      # indique si la strategie est terminee
 
-    def update(self, dt):
+    def update(self):
         """
         Fonction appelee a chaque frame qui fait avancer le robot et verifie si la distance demandee a ete parcourue
         """
 
         #Transformer en fonction
         if self.terminee:
-            self.sim.robot.avancer(0)
+            self.sim.robot.arreter()
             return True
         distance_pixels = self.distance * 100  # conversion de metres en pixels 
         if self.depart is None:
@@ -37,13 +37,20 @@ class AvancerXMetres:
 
         # si on a atteint la distance voulue (serait replacer dans la fonction terminee)
         if distance_parcourue >= distance_pixels:
-            self.sim.robot.freiner(dt)
+            self.sim.robot.arreter()
             self.terminee = True
             return True
 
         return False
     
-#Il faut creer une nouvelle classe TournerXDegree
+#Il faut finir classe TournerXDegree
+class TournerXDegrees:
+    """ Strategie qui fait tourner le robot d'un angle donnee
+    Le robot tourne jusqu'a ce que la distance parcourue atteigne la distance demandee (en metres)
+    """
+    
+    def __init__(self, simulation):
+        pass
 
 class FreinageProgressif:
     """
@@ -78,8 +85,7 @@ class Reculer:
         self.depart = None
         self.actif = True
 
-    def update(self, dt):
-
+    def update(self):
         # si la strategie n'est pas active
         if not self.actif:
             return True
@@ -95,7 +101,7 @@ class Reculer:
         distance_parcourue = math.sqrt(dx**2 + dy**2)
 
         if distance_parcourue >= distance_pixels: # si la distance est atteinte
-            self.sim.robot.freiner(dt)
+            self.sim.robot.arreter()
             self.actif = False
             return True
 
@@ -198,7 +204,7 @@ class GestionStrategies:
                 self.phase = "EVITEMENT"
         elif self.phase == "FREINAGE":  # phase de freinage
 
-            fini = self.freinage.update(dt)
+            fini = self.arreter.update(dt)
 
             if fini:
                 self.phase = "EVITEMENT"
