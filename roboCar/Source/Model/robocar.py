@@ -14,7 +14,7 @@ class RoboCar:
         self.vR = 0 #vitesse roue droite
         self.largeur = 40   # largeur (cote roues)
         self.longueur = 50  # longueur (avant/arriere)
-        self._last_update = None
+        self._last_update = None #memoire du dernier moment ou le robot a ete mis a jour
         
     def get_state(self):
         """Recuperer l'etat du robot"""
@@ -77,15 +77,16 @@ class RoboCar:
 
     def update(self):
         """Mise a jour du robot"""
-        now = time.time()
+        now = time.time() #le temps actuel en secondes
         if self._last_update is None:
             dt = 0.0
         else:
-            dt = now - self._last_update
-        self._last_update = now
+            dt = now - self._last_update #le temps ecoule depuis la derniere mise a jour
+        self._last_update = now #on sauvegarde le moment actuel
 
         v, w = self.calculer_vitesse()
-        self.x += v * math.cos(self.angle) * dt
+        self.x += v * math.cos(self.angle) * dt #on multiplie par dt pour prendre en compte le temps ecoule
         self.y += v * math.sin(self.angle) * dt
-        self.angle += w * dt #si w<0 on tourne a droite et a gauche sinon
+        self.angle += w * dt #plus dt est grand plus il tourne longtemps
+        #si w<0 on tourne a droite et a gauche sinon
     
