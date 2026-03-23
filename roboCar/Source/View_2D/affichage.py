@@ -47,6 +47,13 @@ class Affichage:
 
         for obs in obstacles:
             pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
+
+    def draw_polygone(self, obstacles:list, color=(0, 255, 0)):
+        """ Fonction pour dessiner des polygones quelconques sur l'écran """
+        for obs in obstacles:
+            points = [(p.x, p.y) for p in obs.get_points()]
+            pygame.draw.polygon(self.screen, color, points)
+
     def update(self, robot, obstacles):
         """Met a jour l'affichage et gere les evenements"""
 
