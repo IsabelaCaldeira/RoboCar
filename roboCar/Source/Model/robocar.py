@@ -15,10 +15,14 @@ class RoboCar:
         self.largeur = 40   # largeur (cote roues)
         self.longueur = 50  # longueur (avant/arriere)
         self._last_update = None #memoire du dernier moment ou le robot a ete mis a jour
-        
-    def get_state(self):
+    
+    def get_position(self):
+        """Recuperer les coord du robot"""
+        return self.x, self.y
+    
+    def get_angle(self):
         """Recuperer l'etat du robot"""
-        return self.x, self.y, self.angle
+        return self.angle
     
     def get_wheel_speeds(self):
         return self.vG, self.vR

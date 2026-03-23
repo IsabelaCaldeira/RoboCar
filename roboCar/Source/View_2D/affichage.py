@@ -12,8 +12,9 @@ class Affichage:
     def draw_robot(self, robot):
         """Dessine le robot (rectangle oriente)"""
 
-        x, y, angle = robot.get_state()
-
+        x, y  = robot.get_position()
+        angle = robot.get_angle()
+        
         L = robot.longueur
         W = robot.largeur
 

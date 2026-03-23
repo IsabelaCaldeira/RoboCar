@@ -57,7 +57,7 @@ class Simulation:
         """Calcule la distance libre sur le cote gauche du robot
         Cette fonction sert a savoir si le robot peut tourner a gauche
         """
-        angle_gauche = self.robot.angle - math.pi / 2 # angle correspondant au cote gauche du robot
+        angle_gauche = self.robot.get_angle() - math.pi / 2 # angle correspondant au cote gauche du robot
         dir_x = math.cos(angle_gauche)
         dir_y = math.sin(angle_gauche)
         # point de test sur le côté gauche
@@ -121,8 +121,9 @@ class Simulation:
         On regarde un point situe devant le robot a max_range pixels, puis on calcule a quelle distance il est du bord de la fenetre
         """
         # point situe devant le robot
-        front_x = self.robot.x + math.cos(self.robot.angle) * max_range
-        front_y = self.robot.y + math.sin(self.robot.angle) * max_range
+        angle = self.robot.get_angle() #orientation du robot
+        front_x = self.robot.x + math.cos(angle) * max_range
+        front_y = self.robot.y + math.sin(angle) * max_range
 
         dist_x = min(front_x, self.largeur - front_x) # distance au bord gauche/droit
         dist_y = min(front_y, self.hauteur - front_y) # distance au bord haut/bas
@@ -174,7 +175,7 @@ class Simulation:
 
     def update(self):
         """Met a jour la simulation"""
-        old_state = (self.robot.x, self.robot.y)
+        old_state = self.robot.get_position() # on sauvergarde la position actuel du robot
         self.robot.update() # mise a jour physique du robot
         self.appliquer_murs() # on verifie les bords de la fenetre
         self.a_collision = self.resoudre_collisions(old_state)  # on verifie collisions avec obstacles
