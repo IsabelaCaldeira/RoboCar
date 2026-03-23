@@ -1,6 +1,7 @@
 import math
 from .robocar import RoboCar
-from .obstacle import Obstacle
+from .obstacle import Obstacle, Polygone
+from .vecteur import Vecteur
 
 
 class Simulation:
@@ -17,10 +18,36 @@ class Simulation:
             Obstacle("rectangle", (500, 200), (100, 50)),
             Obstacle("rectangle", (300, 450), (50, 50)),
         ]
+        #self.obstacles = [Polygone([Vecteur(220, -300), Vecteur(240, 320), Vecteur(160, -300)]),]
+
         # dimensions du monde
         self.largeur = largeur
         self.hauteur = hauteur
         self.a_collision = False # booleen indiquant si le robot a rencontre un obstacle
+
+    def collision_segments(A: Vecteur, B: Vecteur, C: Vecteur, D: Vecteur)->bool:
+        """ detecte une collision entre les segments AB et CD"""
+        AB = A.point_vers_vecteur(B); AC = A.point_vers_vecteur(C); AD = A.point_vers_vecteur(D)
+        CD = C.point_vers_vecteur(D); CA = C.point_vers_vecteur(A); CB = C.point_vers_vecteur(B)
+        return AB.produit_vectoriel(AC) * AB.produit_vectoriel(AD) < 0 and CD.produit_vectoriel(CA) * CD.produit_vectoriel(CB) < 0
+
+    def raycast_obstacle(self, ray_size:float=5, portee_capteur=120):
+        """ renvoie la distance entre le robot et l'obstacle le plus proche dans la direction du capteur """
+        ray = Vecteur(ray_size, 0).rotation(self.robot.get_angle()) # vecteur du raycast dans la direction du capteur
+        tete_x, tete_y = self.robot.get_position_tete()
+        ray_x = Vecteur(tete_x, tete_y) # depart du segment rayon
+        ray_y = Vecteur(tete_x + ray.x, tete_y + ray.y) # arrivee du segment rayon
+
+        for ray_i in range(int(portee_capteur/ray_size)): # couper la portee en rayons de taille ray_size
+            for obs in self.obstacles:
+                points = obs.get_points()
+                for j in range(len(points)):
+                    if self.collision_segments(ray_x, ray_y, points[j], points[(j+1) % len(points)]):
+                        return ray_i * ray_size # nombre de rayons avant collision * taille du rayon
+            # ajout d'un epsilon pour eviter de rater la collision
+            ray_x.x += ray.x - 0.01; ray_x.y += ray.y - 0.01
+            ray_y.x += ray.x - 0.01; ray_y.y += ray.y - 0.01
+        return portee_capteur # pas de collision après max rayons
 
     def distance_obstacle(self, max_range=140): #max_range c'est la portee maximale du capteur (en pixels)
         """
@@ -89,7 +116,7 @@ class Simulation:
         Cette fonction sert a savoir si le robot peut tourner a droite
         """
 
-        angle_droite = self.robot.angle + math.pi / 2
+        angle_droite = self.robot.get_angle() + math.pi / 2
         dir_x = math.cos(angle_droite)
         dir_y = math.sin(angle_droite)
 

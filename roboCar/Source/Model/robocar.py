@@ -20,6 +20,12 @@ class RoboCar:
         """Recuperer les coord du robot"""
         return self.x, self.y
     
+    def get_position_tete(self):
+        """Recuperer les coord de la tete du robot (avant du robot)"""
+        tete_x = self.x + math.cos(self.angle) * self.longueur / 2
+        tete_y = self.y + math.sin(self.angle) * self.longueur / 2
+        return tete_x, tete_y
+    
     def get_angle(self):
         """Recuperer l'etat du robot"""
         return self.angle

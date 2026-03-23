@@ -1,5 +1,5 @@
 import random
-from Model.vecteur import Vecteur
+from .vecteur import Vecteur
 
 class Obstacle(object):
     def __init__(self, forme: str, position: tuple, dimensions: tuple):
