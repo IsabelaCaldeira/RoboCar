@@ -6,3 +6,4 @@ from .strategies import (
     EviterObstacles,
     GestionStrategies
 )
+from .adaptateur_simule import AdaptateurSimule
