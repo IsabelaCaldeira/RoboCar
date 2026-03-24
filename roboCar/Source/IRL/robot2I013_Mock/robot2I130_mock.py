@@ -25,14 +25,11 @@ class Robot2IN013_MOCK:
     WHEEL_BASE_CIRCUMFERENCE = WHEEL_BASE_WIDTH * math.pi # perimetre du cercle de rotation (mm)
     WHEEL_CIRCUMFERENCE      = WHEEL_DIAMETER   * math.pi # perimetre de la roue (mm)
     
-    def __init__(self,nb_img=10,fps=25,resolution=None,servoPort = "SERVO1",motionPort="AD1"):
-        """ 
-            Initialise le robot
-            :resolution: resolution de la camera
-            :servoPort: port du servo (SERVO1 ou SERVO2)
-            :motionPort: port pour l'accelerometre (AD1 ou AD2)
-        """
-        pass
+    def __init__(self, nb_img=10, fps=25, resolution=None, servoPort="SERVO1", motionPort="AD1"):
+        print("Initialisation du robot")
+        self.nb_img = nb_img
+        self.fps = fps
+        self.resolution = resolution
   
 
     def stop(self):
@@ -40,10 +37,12 @@ class Robot2IN013_MOCK:
         print("Je suis en stop du robot mock")
     
     def get_image(self):
-        pass
+        print("get_image()")
+        return None
 
     def get_images(self):
-        pass
+        print("get_images()")
+        return []
   
     def set_motor_dps(self, port, dps):
         """
@@ -60,6 +59,7 @@ class Robot2IN013_MOCK:
         :return: couple du  degre de rotation des moteurs
         """
         print("Je suis dans get_motor_position() et retourne la vitesse (dps)")
+        return (0,0)
    
     def offset_motor_encoder(self, port, offset):
         """
@@ -71,7 +71,7 @@ class Robot2IN013_MOCK:
 
         Zero the encoder by offsetting it by the current position
         """
-        pass
+        print("Je suis dans offset_motor_encoder")
 
     def get_distance(self):
         """
@@ -81,22 +81,23 @@ class Robot2IN013_MOCK:
             2. Lorsque la valeur est en dehors de l'intervalle, le retour est **8190**.
         """
         print("Je suis en get_distance() (retourne la distance)")
+        return 1000
 
     def servo_rotate(self,position):
         """
         Tourne le servo a l'angle en parametre.
         :param int position: Angle de rotation, de **0** a **180** degres, 90 pour le milieu.
         """
-        pass
+        print("Je suis dans servo_rotate")
 
     def start_recording(self):
-        pass
+        print("Je suis dans _start_recording()")
 
     def _stop_recording(self):
-        pass
+        print("Je suis dans _stop_recording()")
         
     def _start_recording(self):
-        pass
+        print("Je suis dans _start_recording()")
 
     def __getattr__(self,attr):
         """ Méthodes héritées de GPG : 
