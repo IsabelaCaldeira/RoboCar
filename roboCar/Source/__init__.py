@@ -1,10 +1,7 @@
-# Main __init__.py
-from .Model import RoboCar, Obstacle, Simulation
-from .View_2D import Affichage
-from .Controler import (
-	AvancerXMetres,
-	TournerXDegrees,
-	Reculer,
-	EviterObstacles,
-	GestionStrategies,
-)
+from .Model.simulation import Simulation
+from .Model.robocar import RoboCar
+from .Controler.strategies import GestionStrategies
+from .View_2D.affichage import Affichage
+
+from .Controler.adaptateur_simule import AdaptateurSimule
+from .IRL.robot2I013_mock import Robot2IN013_MOCK
