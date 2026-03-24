@@ -48,7 +48,7 @@ class AdaptateurSimule(Adaptateur):
 
     def calculer_vitesse(self):
         """
-        On garde la même logique que RoboCar :
+        On garde la meme logique que RoboCar :
         v = vitesse linéaire moyenne
         w = vitesse angulaire
         """
