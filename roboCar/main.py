@@ -1,4 +1,4 @@
-from Source import Simulation, GestionStrategies, Affichage
+from Source import Simulation, GestionStrategies, Affichage,RoboCar
 
 LARGEUR = 800
 HAUTEUR = 600
@@ -7,7 +7,8 @@ FPS = 180
 
 def main():
     affichage = Affichage(LARGEUR, HAUTEUR)
-    sim = Simulation(LARGEUR, HAUTEUR) #creation de la simulation
+    robot = RoboCar("Flash", (400, 300), 0)
+    sim = Simulation(LARGEUR, HAUTEUR,robot) #creation de la simulation
     strat = GestionStrategies(sim) #creation du gestionnaire de strategies
 
     running = True #variable pour savoir si le programme doit continuer

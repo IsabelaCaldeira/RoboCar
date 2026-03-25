@@ -85,7 +85,7 @@ class Reculer:
 
     def step(self):
         if self.depart is None:
-            self.depart = (self.sim.robot.x, self.sim.robot.y) #on memorise la position de depart
+            self.depart = self.sim.robot.get_position() #on memorise la position de depart
 
         if self.stop():
             self.sim.robot.arreter()

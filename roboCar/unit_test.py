@@ -9,9 +9,9 @@ from Source import (
     Reculer,
     EviterObstacles,
     GestionStrategies,
+    Robot2IN013_MOCK,
+    AdaptateurSimule
 )
-
-
 class TestRoboCar(unittest.TestCase):
 
     def setUp(self): #setUp sert a preparer ce dont les tests ont besoin avant chaque test
@@ -90,10 +90,90 @@ class TestRoboCar(unittest.TestCase):
         self.assertEqual(self.robot.vR, 0)
 
 
+class TestAdaptateurSimule(unittest.TestCase):
+
+    def setUp(self): #setUp sert a preparer ce dont les tests ont besoin avant chaque test
+        self.robot_mock = Robot2IN013_MOCK()
+        self.robot = AdaptateurSimule(self.robot_mock, coordonnees=(100, 200), angle=0)
+
+    def test_initialisation(self):
+        """Verifie que l'adaptateur simule est correctement initialise"""
+        self.assertEqual(self.robot.x, 100)
+        self.assertEqual(self.robot.y, 200)
+        self.assertEqual(self.robot.vG, 0)
+        self.assertEqual(self.robot.vR, 0)
+
+    def test_calculer_vitesse(self):
+        """Verifie le calcul des vitesses lineaire et angulaire"""
+        self.robot.set_vitesse_gauche(50)
+        self.robot.set_vitesse_droite(50)
+
+        v, w = self.robot.calculer_vitesse()
+
+        self.assertEqual(v, 50)
+        self.assertEqual(w, 0)
+
+    def test_update(self):
+        """Verifie que le robot se deplace correctement avec update()"""
+        self.robot.set_vitesse_gauche(10)
+        self.robot.set_vitesse_droite(10)
+
+        # on simule un delta temps d'une seconde
+        self.robot._last_update = time.time() - 1
+        ancien_x = self.robot.x
+        ancien_y = self.robot.y
+
+        self.robot.update()
+
+        self.assertAlmostEqual(self.robot.x, ancien_x + 10, delta=1.0)
+        self.assertAlmostEqual(self.robot.y, ancien_y, delta=1.0)
+
+    def test_avancer(self):
+        """Verifie que avancer() met les deux roues a la meme vitesse"""
+        self.robot.avancer(40)
+        self.assertEqual(self.robot.vG, 40)
+        self.assertEqual(self.robot.vR, 40)
+
+    def test_reculer(self):
+        """Verifie que reculer() met les vitesses negatives"""
+        self.robot.reculer(30)
+        self.assertEqual(self.robot.vG, -30)
+        self.assertEqual(self.robot.vR, -30)
+
+    def test_tourner_gauche(self):
+        """Verifie que tourner_gauche() active seulement la roue gauche"""
+        self.robot.tourner_gauche(50)
+        self.assertEqual(self.robot.vG, 50)
+        self.assertEqual(self.robot.vR, 0)
+
+    def test_tourner_droite(self):
+        """Verifie que tourner_droite() active seulement la roue droite"""
+        self.robot.tourner_droite(50)
+        self.assertEqual(self.robot.vG, 0)
+        self.assertEqual(self.robot.vR, 50)
+
+    def test_tourner_sur_place(self):
+        """Verifie que tourner_sur_place() fait tourner les roues en sens oppose"""
+        self.robot.tourner_sur_place(50)
+        self.assertEqual(self.robot.vG, 50)
+        self.assertEqual(self.robot.vR, -50)
+
+    def test_arreter(self):
+        """Verifie que arreter() remet les vitesses a zero"""
+        self.robot.vG = 100
+        self.robot.vR = 100
+
+        self.robot.arreter()
+
+        self.assertEqual(self.robot.vG, 0)
+        self.assertEqual(self.robot.vR, 0)
+
+
 class TestSimulation(unittest.TestCase):
 
     def setUp(self):
-        self.sim = Simulation(800, 600)
+        self.robot = RoboCar("Flash", (400, 300), 0)
+        self.sim = Simulation(800, 600, self.robot)
 
     def test_initialisation(self):
         """Verifie les dimensions et la creation du robot"""
@@ -153,7 +233,8 @@ class TestSimulation(unittest.TestCase):
 class TestStrategies(unittest.TestCase):
 
     def setUp(self):
-        self.sim = Simulation(800, 600)
+        self.robot = RoboCar("Flash", (400, 300), 0)
+        self.sim = Simulation(800, 600, self.robot)
         self.sim.obstacles = []
 
     def test_avancer_x_metres_pas_termine_au_premier_appel(self):

@@ -1,5 +1,4 @@
 import math
-from .robocar import RoboCar
 from .obstacle import Obstacle
 
 
@@ -9,8 +8,8 @@ class Simulation:
     Elle contient le robot , les obstacles et les dimensions de la fenêtre
     """
 
-    def __init__(self, largeur, hauteur):
-        self.robot = RoboCar("Flash", (400, 300), 0) # creation du robot au centre de la fenetre
+    def __init__(self, largeur, hauteur,robot):
+        self.robot = robot # creation du robot 
         # liste des obstacles presents dans l'environnement
         self.obstacles = [
             Obstacle("rectangle", (100, 100), (80, 100)),
@@ -28,8 +27,8 @@ class Simulation:
         """
         min_dist = max_range
         # vecteur direction du robot
-        dir_x = math.cos(self.robot.angle)
-        dir_y = math.sin(self.robot.angle)
+        dir_x = math.cos(self.robot.get_angle())
+        dir_y = math.sin(self.robot.get_angle())
 
         for obs in self.obstacles:
             # centre de l'obstacle
@@ -89,7 +88,7 @@ class Simulation:
         Cette fonction sert a savoir si le robot peut tourner a droite
         """
 
-        angle_droite = self.robot.angle + math.pi / 2
+        angle_droite = self.robot.get_angle() + math.pi / 2
         dir_x = math.cos(angle_droite)
         dir_y = math.sin(angle_droite)
 
