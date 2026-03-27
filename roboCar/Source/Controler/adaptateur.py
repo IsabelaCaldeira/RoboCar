@@ -51,7 +51,7 @@ class Adaptateur(ABC):
         pass
 
     @abstractmethod
-    def calculer_vitesse(self):
+    def get_motor_position(self):
         pass
 
     @abstractmethod
