@@ -9,6 +9,8 @@ class AdaptateurSimule(Adaptateur):
     """
 
     WHEEL_BASE_WIDTH = 117  # distance entre roues
+    WHEEL_DIAMETER = 66.5
+    WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * math.pi
 
     def __init__(self, robot, nom="Flash", coordonnees=(400, 300), angle=0):
         self.robot = robot  # robot mock

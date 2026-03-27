@@ -9,6 +9,8 @@ class AdaptateurReel(Adaptateur):
     """
 
     WHEEL_BASE_WIDTH = 117
+    WHEEL_DIAMETER = 66.5
+    WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * math.pi
 
     def __init__(self, robot, nom="Flash", coordonnees=(0, 0), angle=0):
         self.robot = robot
@@ -74,6 +76,7 @@ class AdaptateurReel(Adaptateur):
         return self.robot.get_motor_position()
 
     def get_distance_parcourue(self):
+
         ang_g, ang_d = self.get_motor_position()
 
         dist_g = (ang_g / 360) * self.robot.WHEEL_CIRCUMFERENCE
