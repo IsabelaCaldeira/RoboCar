@@ -177,15 +177,22 @@ class Simulation:
     def update(self):
         """Met a jour la simulation"""
         old_state = self.robot.get_position() # on sauvergarde la position actuel du robot
+
         distance_totale = self.robot.get_distance_parcourue() #distance totale parcourue depuis le debut de la simulation
         angle_total = self.robot.get_angle_parcouru() #angle total parcouru depuis le debut de la simulation
+
         delta_distance = distance_totale - self._last_distance #distance parcourue depuis la dernière mise à jour
         delta_angle = angle_total - self._last_angle_parcouru #angle parcouru depuis la dernière mise à jour
+
         self._last_distance = distance_totale #on met a jour la distance totale parcourue
         self._last_angle_parcouru = angle_total #on met a jour l'angle total parcouru
+
         self.robot.x += delta_distance * math.cos(self.robot.angle) #on met a jour la position du robot en fonction de la distance parcourue et de l'angle actuel
         self.robot.y += delta_distance * math.sin(self.robot.angle)
+
         self.robot.angle += delta_angle #mise a jour de l'angle en fonction de l'angle parcouru
+
         self.appliquer_murs() # on verifie les bords de la fenetre
         self.a_collision = self.resoudre_collisions(old_state)  # on verifie collisions avec obstacles
+
         return self.a_collision
