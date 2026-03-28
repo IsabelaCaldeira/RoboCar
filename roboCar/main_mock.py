@@ -13,7 +13,7 @@ def main():
     adaptateur = AdaptateurSimule(robot_mock, coordonnees=(400, 300), angle=0)
     adaptateur.initialise()
 
-    sim = Simulation(LARGEUR, HAUTEUR, adaptateur)
+    sim = Simulation(LARGEUR, HAUTEUR, adaptateur, mode="adaptateur")
     strat = GestionStrategies(sim)
 
     running = True

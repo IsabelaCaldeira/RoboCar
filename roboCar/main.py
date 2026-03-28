@@ -9,7 +9,7 @@ FPS = 180
 def main():
     affichage = Affichage(LARGEUR, HAUTEUR)
     robot = RoboCar("Flash", (400, 300), 0)
-    sim = Simulation(LARGEUR, HAUTEUR,robot) #creation de la simulation
+    sim = Simulation(LARGEUR, HAUTEUR, robot, mode="robocar") #creation de la simulation
     strat = GestionStrategies(sim) #creation du gestionnaire de strategies
 
     running = True #variable pour savoir si le programme doit continuer
