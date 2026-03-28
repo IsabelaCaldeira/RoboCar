@@ -177,16 +177,8 @@ class Simulation:
     def update(self):
         """Met a jour la simulation"""
         old_state = self.robot.get_position() # on sauvergarde la position actuel du robot
-        now = time.time() #calcule le temps ecoule depuis la derniere mise a jour pour faire une simulation plus realiste
-        if self._last_update is None: #premiere mise a jour, on considere que le temps ecoule est nul
-            dt = 0 
-        else: #sinon, on calcule le temps ecoule
-            dt = now - self._last_update #temps ecoule depuis la derniere mise a jour
-        self._last_update = now #on met a jour le moment de la derniere mise a jour
-        v, w = self.robot.calculer_vitesse() #calcul la vitesse lineaire et angulaire du robot
-        self.robot.x += v * math.cos(self.robot.angle) * dt #met a jour la position du robot en fonction de sa vitesse et de son orientation
-        self.robot.y += v * math.sin(self.robot.angle) * dt 
-        self.robot.angle += w * dt #met a jour l'orientation du robot en fonction de sa vitesse angulaire
+        distance_totale = self.robot.get_distance_parcourue() #distance totale parcourue par le robot depuis le debut de la simulation
+        angle_total = self.robot.get_angle_parcouru() #angle total parcouru par le robot depuis le debut de la simulation
         self.appliquer_murs() # on verifie les bords de la fenetre
         self.a_collision = self.resoudre_collisions(old_state)  # on verifie collisions avec obstacles
         return self.a_collision
