@@ -18,7 +18,7 @@ class AvancerXMetres:
 
     def step(self):
         if self.depart is None:
-            self.depart = (self.sim.robot.x, self.sim.robot.y) # #on enregistre la position actuelle du robot
+            self.depart = self.sim.robot.get_position() # #on enregistre la position actuelle du robot
 
         if self.stop():
             self.sim.robot.arreter() #on arrete le robot et on quitte la fonction si la distance demandee a deja ete parcourue
@@ -43,7 +43,7 @@ class TournerXDegrees:
     
     def __init__(self,simulation,angle,vitesse):
         self.sim = simulation # reference vers la simulation
-        self.angle = angle # distance a parcourir en degree
+        self.angle_voulu = math.radians(angle) # distance a parcourir en degree
         self.vitesse = vitesse # vitesse des roues
 
         self.depart = None #angle de depart du robot
@@ -65,9 +65,8 @@ class TournerXDegrees:
         if self.depart is None:
             return False
 
-        angle_voulu = math.radians(self.angle)
-        angle_parcouru = abs(self.sim.robot.angle - self.depart) #difference entre angle actuel et angle de depart 
-        return angle_parcouru >= angle_voulu
+        angle_parcouru = abs(self.sim.robot.get_angle() - self.depart) #difference entre angle actuel et angle de depart 
+        return angle_parcouru >= self.angle_voulu
         
         
 class Reculer:
@@ -86,7 +85,7 @@ class Reculer:
 
     def step(self):
         if self.depart is None:
-            self.depart = (self.sim.robot.x, self.sim.robot.y) #on memorise la position de depart
+            self.depart = self.sim.robot.get_position() #on memorise la position de depart
 
         if self.stop():
             self.sim.robot.arreter()
