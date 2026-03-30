@@ -53,7 +53,7 @@ class TournerXDegrees:
         
     def step(self):
         if self.depart is None:
-            self.depart = self.sim.robot.angle #on enregistre l'orientation actuelle du robot
+            self.depart = self.sim.robot.get_angle() #on enregistre l'orientation actuelle du robot
             
         if self.stop(): #si l'angle voulu est atteint on arrete le robot
             self.sim.robot.arreter()
@@ -164,6 +164,7 @@ class EviterObstacles:
     def stop(self):
         return False
 
+    
 class GestionStrategies:
     """
     Classe qui gere toutes les strategies du robot

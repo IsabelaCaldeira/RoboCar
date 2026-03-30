@@ -53,3 +53,11 @@ Nous avons constaté que son utilisation n’était pas efficace ,nous avons don
 Par ailleurs,nous avons étudié différentes approches pour gérer les stratégies de comportement du robot
 Nous avons conclu qu'il faut utiliser lesstratégies asynchrones et séquentielles pour organiser et contrôler les actions du robot de manière plus efficace
 Notre objectif pour la prochaine séance est de mettre en place ces nouvelles approches puis de commencer le développement d’un système de traduction entre le robot simulé et le robot réel
+
+Semaine 10:
+Durant cette séance nous avons créé un mock du robot réel afin de pouvoir effectuer des tests sans matériel physique
+Ce mock a été testé à l’aide d’un adaptateur mais nous avons constaté que l’utilisation d’une fonction update() dans cet adaptateur n’était pas appropriée et devra être revue
+Concernant les stratégies nous avons remarquer que c'est mieux de combiner différents types de stratégies(stratégies séquentielles+conditionnelles)afin d’obtenir des comportements plus complets
+Enfin, nous avons analysé nos tests unitaires et remarqué qu’ils étaient tous regroupés dans un seul fichier ce qui n'est pas efficace en terme de lisibilité et organisation
+Nous avons donc prévu de répartir les tests dans plusieurs fichiers chacun dédié à une partie spécifique du programme
+Notre objectif pour la prochaine séance est de corriger l’architecture de l’adaptateur etd’améliorer la composition des stratégies ainsi que  de réorganiser les tests unitaires

@@ -1,4 +1,5 @@
 from Source import Simulation, GestionStrategies, Affichage, Robot2IN013_MOCK, AdaptateurSimule
+import time
 
 LARGEUR = 800
 HAUTEUR = 600
@@ -12,14 +13,14 @@ def main():
     adaptateur = AdaptateurSimule(robot_mock, coordonnees=(400, 300), angle=0)
     adaptateur.initialise()
 
-    sim = Simulation(LARGEUR, HAUTEUR, adaptateur)
+    sim = Simulation(LARGEUR, HAUTEUR, adaptateur, mode="adaptateur")
     strat = GestionStrategies(sim)
 
     running = True
     strat.start()
 
     while running:
-        affichage.clock.tick(FPS)
+        time.sleep(1.0 / FPS)
         strat.step()
         sim.update()
         running = affichage.update(sim.robot, sim.obstacles)
