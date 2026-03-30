@@ -1,4 +1,5 @@
-# vecteur.py : définition de la classe Vecteur, des objects vecteurs seront aussi utilisés pour représenter des points
+# vecteur.py : définition de la classe Vecteur
+# /!\ IMPORTANT : des objects vecteurs seront aussi utilisés pour représenter des points /!\
 import math
 
 class Vecteur:

@@ -11,45 +11,19 @@ class Affichage:
 
     def draw_robot(self, robot):
         """Dessine le robot (rectangle oriente)"""
-
         x, y  = robot.get_position()
         angle = robot.get_angle()
-        
         L = robot.longueur
-        W = robot.largeur
 
-        half_L = L / 2
-        half_W = W / 2
-
-        corners = [
-            (-half_L, -half_W),
-            (-half_L,  half_W),
-            ( half_L,  half_W),
-            ( half_L, -half_W),
-        ]
-
-        rotated = []
-
-        for cx, cy in corners:
-            rx = x + cx * math.cos(angle) - cy * math.sin(angle)
-            ry = y + cx * math.sin(angle) + cy * math.cos(angle)
-            rotated.append((rx, ry))
-
-        pygame.draw.polygon(self.screen, (0, 200, 0), rotated)
+        #corps du robot
+        self.draw_polygone([robot.get_forme_robot()], color=(0, 255, 0))
 
         # ligne indiquant l'avant
-        front_x = x + math.cos(angle) * half_L
-        front_y = y + math.sin(angle) * half_L
-
+        front_x = x + math.cos(angle) * L/2
+        front_y = y + math.sin(angle) * L/2
         pygame.draw.line(self.screen, (255, 255, 255), (x, y), (front_x, front_y), 3)
 
-    def draw_obstacles(self, obstacles):
-        """Dessine les obstacles"""
-
-        for obs in obstacles:
-            pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
-
-    def draw_polygone(self, obstacles:list, color=(0, 255, 0)):
+    def draw_polygone(self, obstacles:list, color=(255, 0, 0)):
         """ Fonction pour dessiner des polygones quelconques sur l'écran """
         for obs in obstacles:
             points = [(p.x, p.y) for p in obs.get_points()]
@@ -67,7 +41,7 @@ class Affichage:
         self.screen.fill((0, 0, 0))
 
         self.draw_robot(robot)
-        self.draw_obstacles(obstacles)
+        self.draw_polygone(obstacles)
 
         pygame.display.update()
 

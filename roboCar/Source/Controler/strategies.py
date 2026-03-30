@@ -146,14 +146,12 @@ class EviterObstacles:
         return False #si l'obstacle est suffisamment loin aucune action est necessaire
 
     def step(self):
-        dist_obs = self.sim.distance_obstacle(max_range=120)  # distance a l'obstacle devant
-        dist_mur = self.sim.distance_mur(max_range=120) # distance au mur devant
-        dist_gauche = self.sim.distance_cote_gauche(max_range=60)
-        dist_droite = self.sim.distance_cote_droite(max_range=60)
+        dist_obs = self.sim.raycast_robot()  # distance a l'obstacle devant
+        dist_gauche = self.sim.distance_cote_robot(90)
+        dist_droite = self.sim.distance_cote_robot(-90)
         #on prend la distance la plus dangereuse
-        distance = min(dist_obs, dist_mur)
     
-        if self.agir_si_proche(distance, dist_gauche, dist_droite):  #si le robot a deja fait une action d'evitement
+        if self.agir_si_proche(dist_obs, dist_gauche, dist_droite):  #si le robot a deja fait une action d'evitement
             return False
 
         #si aucun obstacle alors on avance

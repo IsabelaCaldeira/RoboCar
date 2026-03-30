@@ -1,13 +1,17 @@
 import math
-import time 
+import time
+from .obstacle import Polygone
+from .vecteur import Vecteur
 
 class RoboCar:
-    WHEEL_BASE = 50  # distance entre roues 
+    WHEEL_BASE = 50  # distance entre roues
+    PORTEE_CAPTEURS = 100 # portee des capteurs de distance
 
     def __init__(self, nom, coordonnees, angle):
         self.nom = nom
         self.x, self.y = coordonnees #coordonne du centre du robot
         self.angle = math.radians(angle) #orientation
+        self.angle_tete = 0 #angle de la tete du robot (relative au corps, 0 = meme angle) sur lequel est monté le capteur de distance et la camera
 
         # vitesses roues
         self.vG = 0 #vitesse roue gauche
@@ -21,7 +25,7 @@ class RoboCar:
         return self.x, self.y
     
     def get_position_tete(self):
-        """Recuperer les coord de la tete du robot (avant du robot)"""
+        """Recuperer les coord de la tete du robot (à l'avant)"""
         tete_x = self.x + math.cos(self.angle) * self.longueur / 2
         tete_y = self.y + math.sin(self.angle) * self.longueur / 2
         return tete_x, tete_y
@@ -29,6 +33,10 @@ class RoboCar:
     def get_angle(self):
         """Recuperer l'etat du robot"""
         return self.angle
+    
+    def get_angle_tete(self):
+        """Recuperer l'angle total de la tete du robot"""
+        return (self.angle + self.angle_tete) % (2*math.pi)
     
     def get_wheel_speeds(self):
         return self.vG, self.vR
@@ -83,7 +91,12 @@ class RoboCar:
         Fait tourner le robot vers la droite 
         """
         self.set_vitesse_gauche(0)
-        self.set_vitesse_droite(vitesse)  
+        self.set_vitesse_droite(vitesse)
+
+    def tourner_tete(self, angle):
+        """ Tourne la tete du robot à l'angle en degrés angle (positif = gauche, negatif = droite)"""
+        # rappel, l'angle de la tete est relatif au corps du robot (0 = meme angle que le corps)
+        self.angle_tete = math.radians(angle)
 
     def update(self):
         """Mise a jour du robot"""
@@ -100,3 +113,13 @@ class RoboCar:
         self.angle += w * dt #plus dt est grand plus il tourne longtemps
         #si w<0 on tourne a droite et a gauche sinon
     
+    def get_forme_robot(self)->Polygone:
+        """ renvoie le quadrilatère représentant la hitbox du robot en fonction de sa position et de sa rotation """
+        # points du robot avant rotation et translation (centrés sur l'origine)
+        L2 = self.longueur / 2 ; W2 = self.largeur / 2
+        vecteurs = [Vecteur(-L2, -W2), Vecteur(L2, -W2), Vecteur(L2, W2), Vecteur(-L2, W2)]
+        points = [] # points calculés
+        for vec in vecteurs:
+            vec_rot = vec.rotation(math.degrees(self.angle)) # rotation du segment
+            points.append(Vecteur(vec_rot.x + self.x, vec_rot.y + self.y))
+        return Polygone(points)
