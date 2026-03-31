@@ -46,3 +46,27 @@ class TournerXDegrees:
 
     def stop(self):
         return self.angle_parcouru >= self.angle
+class Sequence:
+    """Strategie sequentielle qui execute une liste de strategies dans l'ordre"""
+    def __init__(self, strategies):
+        self.strategies = strategies #liste des strategies a executer
+        self.i = 0 #index de la strategie actuelle
+
+    def start(self):
+        self.i = 0 #on initialise la sequence
+        #on demarre la premiere strategie si elle existe
+        if self.strategies:
+            self.strategies[0].start()
+    def step(self):
+        if self.stop(): #si toutes les strategies sont finies on ne fait rien
+            return
+        strat = self.strategies[self.i] #strategie actuelle
+        strat.step() #execution d'un pas
+        if strat.stop(): #si la strategie est terminee on passe a la suivante
+            self.i += 1
+            if not self.stop(): #si il reste des strategies on start la suivante
+                self.strategies[self.i].start()
+
+    def stop(self):
+        return self.i >= len(self.strategies) #True si toutes les strategies ont ete executees
+
