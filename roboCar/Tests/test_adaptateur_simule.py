@@ -1,7 +1,7 @@
 import unittest
 import math
 
-from Source.Model import Simulation, RoboCar
+from Source.Model import Simulation, RoboCar,Obstacle
 from Source.Controler import AdaptateurSimule
 
 
@@ -51,18 +51,14 @@ class TestAdaptateurSimule(unittest.TestCase):
     def test_get_distance_sans_obstacle(self):
         """Verifie que get_distance() retourne une distance positive quand il n'y a pas d'obstacle juste devant"""
         distance = self.adaptateur.get_distance()
-
         self.assertGreater(distance, 0)
 
     def test_get_distance_avec_obstacle_devant(self):
         """Verifie que get_distance() detecte un obstacle place devant le robot"""
         # obstacle devant le robot
         self.sim.obstacles = []
-        from Source.Model import Obstacle
         self.sim.obstacles.append(Obstacle("rectangle", (150, 180), (40, 40)))
-
         distance = self.adaptateur.get_distance()
-
         self.assertLess(distance, 120)
 
     def test_get_distance_parcourue(self):

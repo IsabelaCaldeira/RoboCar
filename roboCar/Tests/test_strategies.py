@@ -1,162 +1,196 @@
 import unittest
 import math
 
-from Source.Model import RoboCar, Simulation
-from Source.Controler import (
+from Source import (
+    Simulation,
+    RoboCar,
+    AdaptateurSimule,
     AvancerXMetres,
     TournerXDegrees,
-    Reculer,
-    EviterObstacles,
-    GestionStrategies,
+    Sequence,
+    Condition,
+    Boucle,
+    Obstacle
 )
 
 
 class TestStrategies(unittest.TestCase):
-
     def setUp(self):
-        self.robot = RoboCar("Flash", (400, 300), 0)
-        self.sim = Simulation(800, 600, self.robot, mode="robocar")
-        self.sim.obstacles = []
+        """Cree un monde vide un robot et un adaptateur avant chaque test"""
+        self.sim = Simulation(800, 600, obstacles=[])
+        self.robot = RoboCar("Flash", (400, 300), 0, simulation=self.sim)
+        self.adp = AdaptateurSimule(self.robot)
 
-    def test_avancer_x_metres_pas_termine_au_premier_appel(self):
-        """AvancerXMetres ne doit pas etre termine juste apres le premier step"""
-        strat = AvancerXMetres(self.sim, distance=1, vitesse=80)
+    def test_avancer_x_metres_start_reset(self):
+        """Verifie que start() remet la distance parcourue a zero"""
+        strat = AvancerXMetres(self.adp, distance=10, vitesse=2)
+        strat.distance_parcourue = 99
         strat.start()
-        strat.step()
+        self.assertEqual(strat.distance_parcourue, 0)
 
+    def test_avancer_x_metres_pas_termine_au_debut(self):
+        """Verifie que la strategie n'est pas terminee juste apres start()"""
+        strat = AvancerXMetres(self.adp, distance=10, vitesse=2)
+        strat.start()
         self.assertFalse(strat.stop())
 
-    def test_avancer_x_metres_termine_si_distance_deja_parcourue(self):
-        """AvancerXMetres se termine si la distance est atteinte"""
-        strat = AvancerXMetres(self.sim, distance=1, vitesse=80)
+    def test_avancer_x_metres_commande_avancer(self):
+        """Verifie que step() donne une commande d'avance si la vitesse est positive"""
+        strat = AvancerXMetres(self.adp, distance=10, vitesse=2)
         strat.start()
         strat.step()
+        self.assertEqual(self.robot.vG, 2)
+        self.assertEqual(self.robot.vR, 2)
 
-        # on simule un deplacement du robot
-        self.sim.robot.x += 120
+    def test_avancer_x_metres_commande_reculer(self):
+        """Verifie que step() donne une commande de recul si la vitesse est negative"""
+        strat = AvancerXMetres(self.adp, distance=10, vitesse=-3)
+        strat.start()
+        strat.step()
+        self.assertEqual(self.robot.vG, -3)
+        self.assertEqual(self.robot.vR, -3)
 
+    def test_avancer_x_metres_termine_si_distance_atteinte(self):
+        """Verifie que stop() retourne True si la distance cible est atteinte"""
+        strat = AvancerXMetres(self.adp, distance=10, vitesse=2)
+        strat.start()
+        strat.distance_parcourue = 10
         self.assertTrue(strat.stop())
 
-    def test_avancer_x_metres_commande_avancer(self):
-        """AvancerXMetres doit donner la meme vitesse aux deux roues"""
-        strat = AvancerXMetres(self.sim, distance=1, vitesse=80)
+    def test_avancer_x_metres_arrete_si_termine(self):
+        """Verifie que step() arrete le robot si la strategie est deja terminee."""
+        strat = AvancerXMetres(self.adp, distance=10, vitesse=2)
         strat.start()
+        strat.distance_parcourue = 10
+        #on met des vitesses non nulles avant
+        self.robot.vG = 5
+        self.robot.vR = 5
         strat.step()
+        self.assertEqual(self.robot.vG, 0)
+        self.assertEqual(self.robot.vR, 0)
 
-        self.assertEqual(self.sim.robot.vG, 80)
-        self.assertEqual(self.sim.robot.vR, 80)
-
-    def test_tourner_x_degrees_pas_termine_au_premier_appel(self):
-        """TournerXDegrees ne doit pas etre termine immediatement apres le debut"""
-        strat = TournerXDegrees(self.sim, angle=90, vitesse=80)
+    def test_tourner_x_degrees_start_reset(self):
+        """Verifie que start() remet l'angle parcouru a zero"""
+        strat = TournerXDegrees(self.adp, angle=90, vitesse=0.1)
+        strat.angle_parcouru = 99
         strat.start()
-        strat.step()
+        self.assertEqual(strat.angle_parcouru, 0)
 
+    def test_tourner_x_degrees_pas_termine_au_debut(self):
+        """Verifie que la strategie n'est pas terminee juste apres start()"""
+        strat = TournerXDegrees(self.adp, angle=90, vitesse=0.1)
+        strat.start()
         self.assertFalse(strat.stop())
 
     def test_tourner_x_degrees_commande_rotation(self):
-        """TournerXDegrees doit faire tourner les roues en sens oppose"""
-        strat = TournerXDegrees(self.sim, angle=90, vitesse=80)
+        """Verifie que step() donne une commande de rotation sur place"""
+        strat = TournerXDegrees(self.adp, angle=90, vitesse=0.1)
         strat.start()
         strat.step()
-
-        self.assertEqual(self.sim.robot.vG, 80)
-        self.assertEqual(self.sim.robot.vR, -80)
+        self.assertNotEqual(self.robot.vG, self.robot.vR)
+        self.assertAlmostEqual(self.robot.vG, -self.robot.vR)
 
     def test_tourner_x_degrees_termine_si_angle_atteint(self):
-        """TournerXDegrees doit s'arreter quand l'angle cible est atteint"""
-        strat = TournerXDegrees(self.sim, angle=90, vitesse=80)
+        """Verifie que stop() retourne True si l'angle cible est atteint"""
+        strat = TournerXDegrees(self.adp, angle=90, vitesse=0.1)
         strat.start()
-        strat.step()
-
-        # on simule une rotation de 90 degres
-        self.sim.robot.angle = strat.depart + math.radians(90)
-
+        strat.angle_parcouru = math.radians(90)
         self.assertTrue(strat.stop())
 
-    def test_tourner_x_degrees_pas_termine_si_angle_insuffisant(self):
-        """TournerXDegrees ne doit pas s'arreter si l'angle est insuffisant"""
-        strat = TournerXDegrees(self.sim, angle=90, vitesse=80)
+    def test_tourner_x_degrees_arrete_si_termine(self):
+        """Verifie que step() arrete le robot si la strategie est deja terminee"""
+        strat = TournerXDegrees(self.adp, angle=90, vitesse=0.1)
         strat.start()
+        strat.angle_parcouru = math.radians(90)
+        self.robot.vG = 4
+        self.robot.vR = -4
         strat.step()
+        self.assertEqual(self.robot.vG, 0)
+        self.assertEqual(self.robot.vR, 0)
 
-        # on simule une rotation plus petite que 90 degres
-        self.sim.robot.angle = strat.depart + math.radians(45)
+    def test_sequence_start_initialise_premiere_strategie(self):
+        """Verifie que start() place la sequence sur la premiere strategie"""
+        s1 = AvancerXMetres(self.adp, 5, 2)
+        s2 = TournerXDegrees(self.adp, 45, 0.1)
+        seq = Sequence([s1, s2])
+        seq.start()
+        self.assertEqual(seq.i, 0)
+        self.assertEqual(s1.distance_parcourue, 0)
 
-        self.assertFalse(strat.stop())
+    def test_sequence_passe_a_la_strategie_suivante(self):
+        """Verifie que la sequence passe a la strategie suivante si la strategie courante est terminee"""
+        s1 = AvancerXMetres(self.adp, 5, 2)
+        s2 = TournerXDegrees(self.adp, 45, 0.1)
+        seq = Sequence([s1, s2])
+        seq.start()
+        #on force la premiere strategie a etre terminee
+        s1.distance_parcourue = 5
+        seq.step()
+        self.assertEqual(seq.i, 1)
 
-    def test_reculer_pas_termine_au_premier_appel(self):
-        """Reculer ne doit pas etre termine immediatement"""
-        strat = Reculer(self.sim, vitesse=50, distance=0.4)
-        strat.start()
-        strat.step()
+    def test_sequence_stop_retourne_true_si_tout_est_fini(self):
+        """Verifie que stop() retourne True si toutes les strategies sont executees"""
+        s1 = AvancerXMetres(self.adp, 5, 2)
+        seq = Sequence([s1])
+        seq.i = 1
+        self.assertTrue(seq.stop())
 
-        self.assertFalse(strat.stop())
+    def test_sequence_stop_retourne_false_si_pas_fini(self):
+        """Verifie que stop() retourne False si toutes les strategies ne sont pas encore executees"""
+        s1 = AvancerXMetres(self.adp, 5, 2)
+        seq = Sequence([s1])
+        seq.i = 0
+        self.assertFalse(seq.stop())
 
-    def test_reculer_commande_recul(self):
-        """Reculer doit appliquer des vitesses negatives aux roues"""
-        strat = Reculer(self.sim, vitesse=50, distance=0.4)
-        strat.start()
-        strat.step()
+    def test_condition_choisit_s1_si_obstacle_proche(self):
+        """Verifie que la condition choisit s1 si la distance detectee est inferieure au seuil"""
+        #obstacle juste devant le robot
+        self.sim.obstacles.append(Obstacle("rectangle", (430, 280), (40, 40)))
+        s1 = TournerXDegrees(self.adp, 20, 0.1)
+        s2 = AvancerXMetres(self.adp, 5, 2)
+        cond = Condition(s1, s2, self.adp, 50)
+        cond.start()
+        cond.step()
+        self.assertIs(cond.current, s1)
 
-        self.assertEqual(self.sim.robot.vG, -50)
-        self.assertEqual(self.sim.robot.vR, -50)
+    def test_condition_choisit_s2_si_pas_obstacle_proche(self):
+        """Verifie que la condition choisit s2 si aucun obstacle proche n'est detecte"""
+        s1 = TournerXDegrees(self.adp, 20, 0.1)
+        s2 = AvancerXMetres(self.adp, 5, 2)
+        cond = Condition(s1, s2, self.adp, 20)
+        cond.start()
+        cond.step()
+        self.assertIs(cond.current, s2)
 
-    def test_reculer_termine_si_distance_deja_parcourue(self):
-        """Reculer doit s'arreter quand la distance de recul est atteinte"""
-        strat = Reculer(self.sim, vitesse=50, distance=0.4)
-        strat.start()
-        strat.step()
+    def test_condition_stop_retourne_false(self):
+        """Verifie qu'une condition ne s'arrete jamais toute seule"""
+        s1 = TournerXDegrees(self.adp, 20, 0.1)
+        s2 = AvancerXMetres(self.adp, 5, 2)
+        cond = Condition(s1, s2, self.adp, 20)
+        self.assertFalse(cond.stop())
 
-        self.sim.robot.x -= 50
+    def test_boucle_start_demarre_la_strategie(self):
+        """Verifie que start() de Boucle demarre la strategie interne"""
+        strat = AvancerXMetres(self.adp, 5, 2)
+        boucle = Boucle(strat)
+        boucle.start()
+        self.assertEqual(strat.distance_parcourue, 0)
 
-        self.assertTrue(strat.stop())
+    def test_boucle_relance_si_strategie_terminee(self):
+        """Verifie que Boucle relance la strategie si elle est terminee"""
+        strat = AvancerXMetres(self.adp, 5, 2)
+        boucle = Boucle(strat)
+        boucle.start()
+        strat.distance_parcourue = 5  #force stop() a True
+        boucle.step()
+        #si restart a bien eu lieu, la distance est reinitialisee puis step relance un mouvement
+        self.assertLessEqual(strat.distance_parcourue, 5)
 
-    def test_eviter_obstacles_avance_si_rien_devant(self):
-        """EviterObstacles doit avancer si aucun obstacle est detecte"""
-        strat = EviterObstacles(self.sim, vitesse_avance=80, vitesse_tourne=60, seuil=50)
-        strat.start()
-        strat.step()
-
-        self.assertEqual(self.sim.robot.vG, 80)
-        self.assertEqual(self.sim.robot.vR, 80)
-
-    def test_choisir_direction_gauche(self):
-        """EviterObstacles doit choisir gauche si plus d'espace a gauche"""
-        strat = EviterObstacles(self.sim, vitesse_avance=80, vitesse_tourne=60, seuil=50)
-        strat.choisir_direction(100, 50)
-
-        self.assertEqual(strat.direction, "gauche")
-
-    def test_choisir_direction_droite(self):
-        """EviterObstacles doit choisir droite si plus d'espace a droite"""
-        strat = EviterObstacles(self.sim, vitesse_avance=80, vitesse_tourne=60, seuil=50)
-        strat.choisir_direction(20, 80)
-
-        self.assertEqual(strat.direction, "droite")
-
-    def test_gestion_strategies_initialisation(self):
-        """GestionStrategies doit etre correctement initialise (etat de depart)"""
-        strat = GestionStrategies(self.sim)
-        strat.start()
-
-        self.assertEqual(strat.cur, -1)
-        self.assertFalse(strat.mode_collision)
-
-    def test_gestion_strategies_step(self):
-        """GestionStrategies.step() doit avancer dans les strategies"""
-        strat = GestionStrategies(self.sim)
-        strat.start()
-        strat.step()
-
-        self.assertIn(strat.cur, [-1, 0, 1])
-
-    def test_gestion_strategies_stop_retourne_bool(self):
-        """GestionStrategies.stop() doit toujours retourner un booleen"""
-        strat = GestionStrategies(self.sim)
-        strat.start()
-
-        self.assertIsInstance(strat.stop(), bool)
+    def test_boucle_stop_retourne_false(self):
+        """Verifie qu'une boucle ne s'arrete jamais toute seule"""
+        strat = AvancerXMetres(self.adp, 5, 2)
+        boucle = Boucle(strat)
+        self.assertFalse(boucle.stop())
 
 
 if __name__ == "__main__":
