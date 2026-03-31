@@ -1,137 +1,148 @@
 import unittest
-import time
+import math
 
+from Source.Model import Simulation, RoboCar
 from Source.Controler import AdaptateurSimule
-from Source.IRL import Robot2IN013_MOCK
 
 
 class TestAdaptateurSimule(unittest.TestCase):
+    """
+    Tests de la classe AdaptateurSimule.
 
-    def setUp(self): # setUp sert a preparer ce dont les tests ont besoin avant chaque test
-        self.robot_mock = Robot2IN013_MOCK()
-        self.robot = AdaptateurSimule(self.robot_mock, coordonnees=(100, 200), angle=0)
+    On teste ici l'adaptateur avec un vrai RoboCar simule,
+    car AdaptateurSimule ne travaille plus avec Robot2IN013_MOCK.
+    """
 
-    def test_initialisation(self):
-        """Verifie que l'adaptateur simule est correctement initialise"""
-        self.assertEqual(self.robot.x, 100)
-        self.assertEqual(self.robot.y, 200)
-        self.assertEqual(self.robot.vG, 0)
-        self.assertEqual(self.robot.vR, 0)
+    def setUp(self):
+        """
+        Prepare un monde simple avant chaque test.
+        """
+        self.sim = Simulation(800, 600, obstacles=[])
+        self.robocar = RoboCar("Flash", (100, 200), 0, simulation=self.sim)
+        self.adaptateur = AdaptateurSimule(self.robocar)
 
-    def test_initialise_reset_encodeurs(self):
-        """Verifie que initialise() remet les encodeurs a zero"""
-        self.robot.pos_g = 100
-        self.robot.pos_d = 200
+    def test_calculer_vitesse(self):
+        """
+        Verifie que calculer_vitesse(v, w) met bien a jour
+        les vitesses des roues du robot.
+        """
+        self.adaptateur.calculer_vitesse(10, 0)
 
-        self.robot.initialise()
+        self.assertEqual(self.robocar.vG, 10)
+        self.assertEqual(self.robocar.vR, 10)
 
-        self.assertEqual(self.robot.pos_g, 0)
-        self.assertEqual(self.robot.pos_d, 0)
-        self.assertIsNotNone(self.robot._last_update)
+    def test_calculer_vitesse_rotation(self):
+        """
+        Verifie que calculer_vitesse(v, w) donne des vitesses
+        differentes si le robot tourne.
+        """
+        self.adaptateur.calculer_vitesse(0, 2)
 
-    def test_get_position(self):
-        """Verifie que get_position() retourne les bonnes coordonnees"""
-        position = self.robot.get_position()
-        self.assertEqual(position, (100, 200))
-
-    def test_get_angle(self):
-        """Verifie que get_angle() retourne le bon angle"""
-        self.assertEqual(self.robot.get_angle(), 0)
-
-    def test_get_wheel_speeds(self):
-        """Verifie que get_wheel_speeds() retourne les bonnes vitesses"""
-        self.robot.vG = 10
-        self.robot.vR = 20
-
-        vitesses = self.robot.get_wheel_speeds()
-
-        self.assertEqual(vitesses, (10, 20))
+        self.assertNotEqual(self.robocar.vG, self.robocar.vR)
 
     def test_avancer(self):
-        """Verifie que avancer() met les deux roues a la meme vitesse"""
-        self.robot.avancer(40)
-        self.assertEqual(self.robot.vG, 40)
-        self.assertEqual(self.robot.vR, 40)
+        """
+        Verifie que avancer() met les deux roues a la meme vitesse.
+        """
+        self.adaptateur.avancer(4)
+
+        self.assertEqual(self.robocar.vG, 4)
+        self.assertEqual(self.robocar.vR, 4)
 
     def test_reculer(self):
-        """Verifie que reculer() met les vitesses negatives"""
-        self.robot.reculer(30)
-        self.assertEqual(self.robot.vG, -30)
-        self.assertEqual(self.robot.vR, -30)
+        """
+        Verifie que reculer() met les deux roues a une vitesse negative.
+        """
+        self.adaptateur.reculer(3)
 
-    def test_tourner_gauche(self):
-        """Verifie que tourner_gauche() active seulement la roue gauche"""
-        self.robot.tourner_gauche(50)
-        self.assertEqual(self.robot.vG, 50)
-        self.assertEqual(self.robot.vR, 0)
-
-    def test_tourner_droite(self):
-        """Verifie que tourner_droite() active seulement la roue droite"""
-        self.robot.tourner_droite(50)
-        self.assertEqual(self.robot.vG, 0)
-        self.assertEqual(self.robot.vR, 50)
+        self.assertEqual(self.robocar.vG, -3)
+        self.assertEqual(self.robocar.vR, -3)
 
     def test_tourner_sur_place(self):
-        """Verifie que tourner_sur_place() fait tourner les roues en sens oppose"""
-        self.robot.tourner_sur_place(50)
-        self.assertEqual(self.robot.vG, 50)
-        self.assertEqual(self.robot.vR, -50)
+        """
+        Verifie que tourner_sur_place() met les roues en sens oppose.
+        """
+        self.adaptateur.tourner_sur_place(0.5)
+
+        self.assertAlmostEqual(self.robocar.vG, -self.robocar.vR)
 
     def test_arreter(self):
-        """Verifie que arreter() remet les vitesses a zero"""
-        self.robot.vG = 100
-        self.robot.vR = 100
+        """
+        Verifie que arreter() remet les vitesses des roues a zero.
+        """
+        self.robocar.vG = 10
+        self.robocar.vR = 20
 
-        self.robot.arreter()
+        self.adaptateur.arreter()
 
-        self.assertEqual(self.robot.vG, 0)
-        self.assertEqual(self.robot.vR, 0)
+        self.assertEqual(self.robocar.vG, 0)
+        self.assertEqual(self.robocar.vR, 0)
 
-    def test_get_motor_position(self):
-        """Verifie que get_motor_position() fait evoluer les encodeurs"""
-        self.robot.vG = 10
-        self.robot.vR = 10
-
-        # on simule un delta temps d'une seconde
-        self.robot._last_update = time.time() - 1
-
-        pos_g, pos_d = self.robot.get_motor_position()
-
-        self.assertAlmostEqual(pos_g, 10, delta=1.0)
-        self.assertAlmostEqual(pos_d, 10, delta=1.0)
-
-    def test_get_distance_parcourue(self):
-        """Verifie que la distance parcourue est positive si les roues avancent"""
-        self.robot.vG = 10
-        self.robot.vR = 10
-
-        # on simule un delta temps d'une seconde
-        self.robot._last_update = time.time() - 1
-        distance = self.robot.get_distance_parcourue()
+    def test_get_distance_sans_obstacle(self):
+        """
+        Verifie que get_distance() retourne une distance positive
+        quand il n'y a pas d'obstacle juste devant.
+        """
+        distance = self.adaptateur.get_distance()
 
         self.assertGreater(distance, 0)
 
+    def test_get_distance_avec_obstacle_devant(self):
+        """
+        Verifie que get_distance() detecte un obstacle place devant le robot.
+        """
+        # obstacle devant le robot
+        self.sim.obstacles = []
+        from Source.Model import Obstacle
+        self.sim.obstacles.append(Obstacle("rectangle", (150, 180), (40, 40)))
+
+        distance = self.adaptateur.get_distance()
+
+        self.assertLess(distance, 120)
+
+    def test_get_distance_parcourue(self):
+        """
+        Verifie que get_distance_parcourue() retourne une distance positive
+        si la position du robot a change.
+        """
+        # ancienne position memorisee au setUp : (100, 200)
+        self.robocar.appliquer(110, 200, self.robocar.angle)
+
+        distance = self.adaptateur.get_distance_parcourue()
+
+        self.assertAlmostEqual(distance, 10)
+
+    def test_get_distance_parcourue_nulle(self):
+        """
+        Verifie que la distance parcourue vaut 0
+        si le robot n'a pas bouge.
+        """
+        distance = self.adaptateur.get_distance_parcourue()
+
+        self.assertEqual(distance, 0)
+
     def test_get_angle_parcouru(self):
-        """Verifie que l'angle parcouru est nul si les deux roues ont la meme vitesse"""
-        self.robot.vG = 10
-        self.robot.vR = 10
+        """
+        Verifie que get_angle_parcouru() retourne un angle positif
+        si l'orientation du robot a change.
+        """
+        ancien_angle = self.robocar.angle
+        nouvel_angle = ancien_angle + math.pi / 4  # 45 degres
 
-        # on simule un delta temps d'une seconde
-        self.robot._last_update = time.time() - 1
-        angle = self.robot.get_angle_parcouru()
+        self.robocar.appliquer(self.robocar.x, self.robocar.y, nouvel_angle)
 
-        self.assertAlmostEqual(angle, 0, delta=0.1)
+        angle = self.adaptateur.get_angle_parcouru()
 
-    def test_get_angle_parcouru_non_nul(self):
-        """Verifie que l'angle parcouru change si les roues n'ont pas la meme vitesse"""
-        self.robot.vG = 10
-        self.robot.vR = 20
+        self.assertAlmostEqual(angle, math.pi / 4)
 
-        # on simule un delta temps d'une seconde
-        self.robot._last_update = time.time() - 1
-        angle = self.robot.get_angle_parcouru()
+    def test_get_angle_parcouru_nul(self):
+        """
+        Verifie que get_angle_parcouru() vaut 0
+        si l'angle n'a pas change.
+        """
+        angle = self.adaptateur.get_angle_parcouru()
 
-        self.assertNotEqual(angle, 0)
+        self.assertEqual(angle, 0)
 
 
 if __name__ == "__main__":
