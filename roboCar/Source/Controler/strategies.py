@@ -9,6 +9,7 @@ class AvancerXMetres:
         self.vitesse = vitesse #vitesse de deplacement
         self.distance_parcourue = 0 #distance parcourue depuis le debut de la strategie
 
+    #il faut calculer les positions sans self.depart , on a besoin de quelque chose comme get_distance_parcorue 
     def start(self):
         self.distance_parcourue = 0 #on reset la distance au debut de la strategie
 
@@ -22,9 +23,18 @@ class AvancerXMetres:
             self.adaptateur.reculer(-self.vitesse)
         self.distance_parcourue += self.adaptateur.get_distance_parcourue()
 
+    #On a pas access aux coord du robot reel, donc il faut trouver une autre façon calculer la distance
     def stop(self):
-        return self.distance_parcourue >= self.distance
-
+        distance_pixels = self.distance * 100 #conversion metres en pixels
+        if self.depart is None:
+            return False
+        #difference entre la position actuelle et la position de depart
+        dx = self.sim.robot.x - self.depart[0]
+        dy = self.sim.robot.y - self.depart[1]
+        distance_parcourue = math.sqrt(dx**2 + dy**2)
+        return distance_parcourue >= distance_pixels #si la distance voulue es atteinte alors la strategies s'arrete
+    
+#Meme principe que les problemes d'AvancerXMetres
 class TournerXDegrees:
     """Strategie qui fait tourner le robot jusqu'a atteindre un angle donne"""
 
