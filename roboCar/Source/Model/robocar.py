@@ -29,7 +29,7 @@ class RoboCar:
         """Retourne l'angle du robot"""
         return self.angle
 
-    def calculer_vitesse(self):
+    def set_vitesse(self):
         """On calcule la vitesse lineaire et angulaire
         """
         v = (self.vR + self.vG) / 2
@@ -55,7 +55,7 @@ class RoboCar:
     def step(self):
         """On fait une mise a jour complete 
         """
-        v, w = self.calculer_vitesse()
+        v, w = self.set_vitesse()
         next_x, next_y, next_angle = self.update(v, w)
 
         if not self.simulation.collision(next_x, next_y, self.longueur, self.largeur):

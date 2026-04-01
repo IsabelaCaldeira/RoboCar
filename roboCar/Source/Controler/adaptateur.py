@@ -6,7 +6,7 @@ class Adaptateur(ABC):
     """
 
     @abstractmethod
-    def calculer_vitesse(self, v, w):
+    def set_vitesse(self, v, w):
         """Convertit une vitesse lineaire v et une vitesse angulaire w
         en vitesse de roue gauche et de roue droite"""
         pass

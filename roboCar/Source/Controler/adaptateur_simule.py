@@ -15,7 +15,8 @@ class AdaptateurSimule(Adaptateur):
 
         self.old_angle = robot.get_angle()
 
-    def calculer_vitesse(self, v, w):
+    #Problem avec les noms des foncctions 
+    def set_vitesse(self, v, w):
         """Convertit v et w en vitesses des roues
         """
         vG = v - (w * self.robot.WHEEL_BASE / 2)
@@ -28,6 +29,7 @@ class AdaptateurSimule(Adaptateur):
         """Distance devant le robot"""
         return self.robot.get_distance()
 
+    #On calcule pas la vrai distance parcourue, plutot le parcours ici (probleme avec la façon qu'on calcule et le temps)
     def get_distance_parcourue(self):
         """Distance euclidienne parcourue depuis dernier appel.
         """
@@ -55,11 +57,11 @@ class AdaptateurSimule(Adaptateur):
 
     def avancer(self, vitesse):
         """Avancer tout droit"""
-        self.calculer_vitesse(vitesse, 0)
+        self.set_vitesse(vitesse, 0)
 
     def reculer(self, vitesse):
         """Reculer"""
-        self.calculer_vitesse(-vitesse, 0)
+        self.set_vitesse(-vitesse, 0)
 
     def arreter(self):
         """Stop"""
@@ -68,4 +70,4 @@ class AdaptateurSimule(Adaptateur):
 
     def tourner_sur_place(self, vitesse):
         """Rotation sur place"""
-        self.calculer_vitesse(0, vitesse)
+        self.set_vitesse(0, vitesse)

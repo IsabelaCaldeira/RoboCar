@@ -14,6 +14,8 @@ def main():
     robot = RoboCar("Flash", (400, 300), 0, simulation=sim)  # creation du robot
     adaptateur = AdaptateurSimule(robot)  # adaptateur pour piloter le robot
     view = Affichage(LARGEUR, HAUTEUR)  # affichage pygame
+    
+    #Autre fichier cette partie [depart, reaction1, reaction2]
     # petite sequence de depart executee une seule fois
     depart = Sequence([
         AvancerXMetres(adaptateur, 40, 2),

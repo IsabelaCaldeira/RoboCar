@@ -12,15 +12,15 @@ class TestAdaptateurSimule(unittest.TestCase):
         self.robocar = RoboCar("Flash", (100, 200), 0, simulation=self.sim)
         self.adaptateur = AdaptateurSimule(self.robocar)
 
-    def test_calculer_vitesse(self):
-        """Verifie que calculer_vitesse(v, w) met bien a jour les vitesses des roues du robot"""
-        self.adaptateur.calculer_vitesse(10, 0)
+    def test_set_vitesse(self):
+        """Verifie que set_vitesse(v, w) met bien a jour les vitesses des roues du robot"""
+        self.adaptateur.set_vitesse(10, 0)
         self.assertEqual(self.robocar.vG, 10)
         self.assertEqual(self.robocar.vR, 10)
 
-    def test_calculer_vitesse_rotation(self):
-        """Verifie que calculer_vitesse(v, w) donne des vitesses differentes si le robot tourne"""
-        self.adaptateur.calculer_vitesse(0, 2)
+    def test_set_vitesse_rotation(self):
+        """Verifie que set_vitesse(v, w) donne des vitesses differentes si le robot tourne"""
+        self.adaptateur.set_vitesse(0, 2)
         self.assertNotEqual(self.robocar.vG, self.robocar.vR)
 
     def test_avancer(self):

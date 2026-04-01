@@ -56,6 +56,9 @@ class TournerXDegrees:
 
     def stop(self):
         return self.angle_parcouru >= self.angle
+    
+#Plus des fonctions ici -limitant (le robot reel a seulement access à ces fonctions la)
+    
 class Sequence:
     """Strategie sequentielle qui execute une liste de strategies dans l'ordre"""
     def __init__(self, strategies):
@@ -79,7 +82,7 @@ class Sequence:
 
     def stop(self):
         return self.i >= len(self.strategies) #True si toutes les strategies ont ete executees
-
+    
 class Condition:
     """Strategie conditionnelle qui choisit dynamiquement entre 2 strategies"""
     def __init__(self, s1, s2, adaptateur, distance):
@@ -94,10 +97,10 @@ class Condition:
 
     def step(self):
         d = self.adaptateur.get_distance() #lecture de la distance devant le robot
-        if d<self.distance: #si obstacle proche donc strategie 1
-            new =self.s1
+        if d < self.distance: #si obstacle proche donc strategie 1
+            new = self.s1
         else:
-            new=self.s2
+            new = self.s2
         if self.current is not new: #si la strategie change on reset
             self.current = new
             self.current.start()
@@ -107,6 +110,7 @@ class Condition:
 
     def stop(self):
         return False #une strategie conditionnelle ne s'arrete jamais seule
+    
 class Boucle:
     """Strategie qui repete une autre strategie a l'infini"""
     def __init__(self, strat):

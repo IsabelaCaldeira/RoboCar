@@ -27,19 +27,19 @@ class TestRoboCar(unittest.TestCase):
         """Verifie que get_angle() retourne bien l'angle en radians"""
         self.assertEqual(self.robot.get_angle(), 0)
 
-    def test_calculer_vitesse_ligne_droite(self):
+    def test_set_vitesse_ligne_droite(self):
         """Verifie que si les deux roues ont la meme vitesse alors le robot avance en ligne droite"""
         self.robot.vG = 50
         self.robot.vR = 50
-        v, w = self.robot.calculer_vitesse()
+        v, w = self.robot.set_vitesse()
         self.assertEqual(v, 50)
         self.assertEqual(w, 0)
 
-    def test_calculer_vitesse_rotation(self):
+    def test_set_vitesse_rotation(self):
         """Verifie que si les roues ont des vitesses differentes alors la vitesse angulaire n'est pas nulle"""
         self.robot.vG = 20
         self.robot.vR = 40
-        v, w = self.robot.calculer_vitesse()
+        v, w = self.robot.set_vitesse()
         self.assertEqual(v, 30)
         self.assertNotEqual(w, 0)
 
