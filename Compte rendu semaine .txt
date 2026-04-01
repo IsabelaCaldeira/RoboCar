@@ -61,3 +61,13 @@ Concernant les stratégies nous avons remarquer que c'est mieux de combiner diff
 Enfin, nous avons analysé nos tests unitaires et remarqué qu’ils étaient tous regroupés dans un seul fichier ce qui n'est pas efficace en terme de lisibilité et organisation
 Nous avons donc prévu de répartir les tests dans plusieurs fichiers chacun dédié à une partie spécifique du programme
 Notre objectif pour la prochaine séance est de corriger l’architecture de l’adaptateur etd’améliorer la composition des stratégies ainsi que  de réorganiser les tests unitaires
+
+Semaine 11:
+
+Durant cette seance nous avons ameliore plusieurs parties du projet notamment les fichiers simulation.py et strategies.py
+Nous avons simplifie le code en supprimant certaines classes devenues inutiles ce qui a permis de rendre l’architecture plus claire
+Nous avons egalement mis en place differents types de strategies(sequentielles,conditionnelles,en boucle)
+Cependant nous avons constate que le robot reste encore limite dans ses capacites
+Il sera donc necessaire d’ajouter de nouvelles strategies pour ameliorer son comportement
+Nous avons aussi identifie un problème concernant le calcul de la distance parcourue qui doit etre recuperee correctement a chaque etape afin d’eviter des incoherences par la suite
+Notre objectif pour la prochaine seance est de corriger ce probleme de distance d’enrichir les strategies existantes et de commencer a travailler sur un environnement de simulation en 3D
