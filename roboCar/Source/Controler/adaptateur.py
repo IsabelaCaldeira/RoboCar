@@ -27,21 +27,6 @@ class Adaptateur(ABC):
         pass
 
     @abstractmethod
-    def avancer(self, vitesse):
-        """Fait avancer le robot"""
-        pass
-
-    @abstractmethod
-    def reculer(self, vitesse):
-        """Fait reculer le robot"""
-        pass
-
-    @abstractmethod
     def arreter(self):
         """Arrete le robot"""
-        pass
-
-    @abstractmethod
-    def tourner_sur_place(self, vitesse):
-        """Fait tourner le robot sur lui-meme"""
         pass

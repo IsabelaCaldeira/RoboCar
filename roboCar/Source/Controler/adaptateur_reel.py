@@ -30,7 +30,6 @@ class AdaptateurReel(Adaptateur):
         """
         return self.robot.get_distance()
 
-    #Meme probleme qu'avec la simulation, mais plus imperatif
     def get_distance_parcourue(self):
         """Calcule la distance parcourue depuis le dernier appel
         a partir de la variation des encodeurs
@@ -67,25 +66,7 @@ class AdaptateurReel(Adaptateur):
 
         return (dist_d - dist_g) / self.WHEEL_BASE_WIDTH
 
-    def avancer(self, vitesse):
-        """Fait avancer le robot reel"""
-        vG, vR = self.set_vitesse(vitesse, 0)
-        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, vG)
-        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, vR)
-
-    def reculer(self, vitesse):
-        """Fait reculer le robot reel"""
-        vG, vR = self.set_vitesse(-vitesse, 0)
-        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, vG)
-        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, vR)
-
     def arreter(self):
         """Arrete completement le robot reel"""
         self.robot.set_motor_dps(self.robot.MOTOR_LEFT, 0)
         self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, 0)
-
-    def tourner_sur_place(self, vitesse):
-        """Fait tourner le robot reel sur lui meme"""
-        vG, vR = self.set_vitesse(0, vitesse)
-        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, vG)
-        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, vR)
