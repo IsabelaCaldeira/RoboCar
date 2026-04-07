@@ -1,13 +1,14 @@
 import unittest
 import math
 
-from Source import Simulation, RoboCar
+from Source import Simulation, RoboCar, Obstacle
 
 
 class TestRoboCar(unittest.TestCase):
     def setUp(self):
         """Cree un robot dans un monde simple avant chaque test"""
-        self.sim = Simulation(800, 600, obstacles=[])
+        self.sim = Simulation(800, 600)
+        self.sim.obstacles = []  # on vide les obstacles pour maitriser les tests
         self.robot = RoboCar("Flash", (100, 200), 0, simulation=self.sim)
 
     def test_initialisation(self):
@@ -46,11 +47,13 @@ class TestRoboCar(unittest.TestCase):
     def test_update(self):
         """Verifie que update(v, w) calcule le prochain etat sans modifier directement le robot"""
         next_x, next_y, next_angle = self.robot.update(10, 0)
-        #le robot ne doit pas encore avoir bouge
+
+        # le robot ne doit pas encore avoir bouge
         self.assertEqual(self.robot.x, 100)
         self.assertEqual(self.robot.y, 200)
         self.assertEqual(self.robot.angle, 0)
-        #mais la position calculee doit etre correcte
+
+        # mais la position calculee doit etre correcte
         self.assertAlmostEqual(next_x, 100 + 10 * self.robot.PAS)
         self.assertAlmostEqual(next_y, 200)
         self.assertAlmostEqual(next_angle, 0)
@@ -73,7 +76,7 @@ class TestRoboCar(unittest.TestCase):
 
     def test_step_avec_collision_mur(self):
         """Verifie que step() retourne False si le robot va heurter un mur"""
-        # On place le robot tres pres du bord droit
+        # on place le robot tres pres du bord droit
         self.robot.x = 780
         self.robot.y = 200
         self.robot.vG = 10
@@ -88,7 +91,6 @@ class TestRoboCar(unittest.TestCase):
 
     def test_get_distance_avec_obstacle(self):
         """Verifie que get_distance() detecte un obstacle place devant le robot"""
-        from Source import Obstacle
         self.sim.obstacles.append(Obstacle("rectangle", (150, 180), (40, 40)))
         distance = self.robot.get_distance()
         self.assertLess(distance, 120)
