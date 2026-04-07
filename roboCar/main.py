@@ -1,7 +1,6 @@
 from Source import Simulation, Affichage, RoboCar
 from Source import AdaptateurSimule
 from Source import creer_strategie
-import pygame
 import time
 
 LARGEUR = 800
@@ -22,11 +21,7 @@ def main():
         if not robot.step():
             adp.arreter()
         #affichage
-        view.update(robot, sim.obstacles)
-        #fermeture de la fenetre
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+        running = view.update(robot, sim.obstacles)
 
         time.sleep(0.01)
 
