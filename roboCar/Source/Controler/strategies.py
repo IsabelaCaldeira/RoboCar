@@ -9,7 +9,6 @@ class AvancerXMetres:
         self.vitesse = vitesse #vitesse de deplacement
         self.distance_parcourue = 0 #distance parcourue depuis le debut de la strategie
 
-    #il faut calculer les positions sans self.depart , on a besoin de quelque chose comme get_distance_parcorue 
     def start(self):
         self.distance_parcourue = 0 #on reset la distance au debut de la strategie
 
