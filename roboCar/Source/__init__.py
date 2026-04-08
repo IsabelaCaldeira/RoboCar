@@ -1,6 +1,7 @@
 from .Model.simulation import Simulation
 from .Model.robocar import RoboCar
 from .Model.obstacle import Obstacle
+from .Model.ballon import Ballon
 from .Controler.strategies import (
     AvancerXMetres,
     TournerXDegrees,
