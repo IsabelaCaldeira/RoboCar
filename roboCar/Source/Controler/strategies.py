@@ -117,4 +117,11 @@ class Boucle:
         return False #une boucle ne s'arrete jamais
     
 class Hexagone:
-    def __init__(self, )
+    def __init__(self, nb_cote):
+        self.nb_cote = nb_cote
+        self.angle_parcouru = 0
+        self.rotation = 360/nb_cote
+    
+    def start(self):
+        if not self.stop():
+            self.

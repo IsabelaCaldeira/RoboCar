@@ -83,5 +83,5 @@ class RoboCar:
     def dessiner(self, b):
         self.dessin = b
 
-    def changer_couleur(couleur):
+    def changer_couleur(self, couleur):
         self.line_color = couleur
