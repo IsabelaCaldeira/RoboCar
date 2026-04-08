@@ -22,7 +22,7 @@ def main():
         if not robot.step():
             adp.arreter()
         #affichage
-        running = view.update(robot, sim.obstacles)
+        running = view.update(robot, sim.obstacles, adp)
 
         time.sleep(0.01)
 

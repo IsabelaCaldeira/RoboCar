@@ -11,6 +11,7 @@ class RoboCar:
         self.nom = nom
         self.x, self.y = coordonnees
         self.angle = math.radians(angle)
+        self.crayon = "abaisee"
 
         # vitesses roues
         self.vG = 0

@@ -47,7 +47,6 @@ class TournerXDegrees:
     def stop(self):
         return self.angle_parcouru >= self.angle #True si l'angle cible est atteint
     
-    
 class Sequence:
     """Strategie sequentielle qui execute une liste de strategies dans l'ordre"""
     def __init__(self, strategies):
