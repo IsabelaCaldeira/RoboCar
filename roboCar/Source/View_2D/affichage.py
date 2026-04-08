@@ -8,6 +8,7 @@ class Affichage:
         self.screen = pygame.display.set_mode((largeur, hauteur))
         pygame.display.set_caption("Flash car")
         self.clock = pygame.time.Clock()
+        self.ligne = []
 
     def draw_robot(self, robot):
         """Dessine le robot (rectangle oriente)"""
@@ -48,6 +49,12 @@ class Affichage:
 
         for obs in obstacles:
             pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
+
+    def draw_line(self, robot):
+        self.ligne.append(robot.get_position())
+        for pos in self.ligne:
+            pygame.draw.rect(self.screen, (0, 0, 200), (pos, (1,1)))
+
     def update(self, robot, obstacles):
         """Met a jour l'affichage et gere les evenements"""
 
@@ -59,6 +66,7 @@ class Affichage:
 
         self.screen.fill((0, 0, 0))
 
+        self.draw_line(robot)        
         self.draw_robot(robot)
         self.draw_obstacles(obstacles)
 
