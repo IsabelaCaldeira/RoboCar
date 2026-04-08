@@ -48,7 +48,7 @@ class Affichage:
 
         for obs in obstacles:
             pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
-    def update(self, robot, obstacles):
+    def update(self, robot1, robot2,obstacles):
         """Met a jour l'affichage et gere les evenements"""
 
         running = True
@@ -59,7 +59,8 @@ class Affichage:
 
         self.screen.fill((0, 0, 0))
 
-        self.draw_robot(robot)
+        self.draw_robot(robot1)
+        self.draw_robot(robot2)
         self.draw_obstacles(obstacles)
 
         pygame.display.update()
