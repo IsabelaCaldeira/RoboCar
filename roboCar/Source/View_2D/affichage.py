@@ -47,7 +47,17 @@ class Affichage:
         """Dessine les obstacles"""
 
         for obs in obstacles:
-            pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
+            if (obs.forme=="rectangle"):
+                pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
+            elif (obs.forme=="cercle"):
+                x,y=obs.pos
+                pygame.draw.circle(self.screen,(255,0,0),(x,y),12)
+            elif (obs.forme=="triangle"):
+                x,y=obs.pos
+                w,h=obs.dim
+                points=[(x+w/2,y),(x,y+h),(x+w,y+h)]
+                pygame.draw.polygon(self.screen,(0,0,255),points)
+      
     def update(self, robot, obstacles):
         """Met a jour l'affichage et gere les evenements"""
 

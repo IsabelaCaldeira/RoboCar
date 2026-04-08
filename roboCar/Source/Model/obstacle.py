@@ -5,6 +5,7 @@ class Obstacle(object):
     def __init__(self, forme: str, position: tuple, dimensions: tuple):
         self.pos = position #position (x,y) 
         self.dim = dimensions #(largeur,hauteur) 
+        self.forme=forme
 
     def pos_aleatoire(self):  
         x = self.pos[0] + random.randint(0,500)
