@@ -9,14 +9,14 @@ class Simulation:
         self.largeur = largeur #largeur de la fenetre
         self.hauteur = hauteur #hauteur de la fenetre
         self.obstacles = [
-            Obstacle("rectangle", (0,0), (80, 100)),
-            Obstacle("rectangle", (0,0), (100, 50)),
-            Obstacle("rectangle", (0,0), (50, 50)),
-        ]
-        self.obstacles[0].pos_aleatoire()
-        self.obstacles[1].pos_aleatoire()
-        self.obstacles[2].pos_aleatoire()
+            Obstacle("rectangle", (300,0), (150, 100)),
+            Obstacle("rectangle", (300,250), (150, 100)),
+            Obstacle("rectangle", (300,500), (150, 100)),
 
+
+
+        ]
+    
 
     def collision(self, x, y, longueur, largeur):
         """Verifie si il y a collision avec un mur ou un obstacle
