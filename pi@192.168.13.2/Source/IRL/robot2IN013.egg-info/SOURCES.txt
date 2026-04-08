@@ -1,0 +1,7 @@
+setup.py
+robot2I013/__init__.py
+robot2I013/robot2I013.py
+robot2IN013.egg-info/PKG-INFO
+robot2IN013.egg-info/SOURCES.txt
+robot2IN013.egg-info/dependency_links.txt
+robot2IN013.egg-info/top_level.txt

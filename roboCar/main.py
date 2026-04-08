@@ -9,7 +9,8 @@ HAUTEUR = 600
 
 def main():
     sim = Simulation(LARGEUR, HAUTEUR) #creation du monde
-    robot = RoboCar("Flash", (400, 300), 0, simulation=sim) #creation du robot
+    #Exercice 1 Question 1.1 Partie Robot
+    robot = RoboCar("Flash", (100, 550), 0, simulation=sim) #Placement du robot dans le coin inferiur gauche
     adp = AdaptateurSimule(robot) #adaptateur de pilotage
     view = Affichage(LARGEUR, HAUTEUR) #affichage
     strat = creer_strategie(adp) #creation de la strategie globale
