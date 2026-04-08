@@ -23,3 +23,17 @@ def creer_strategie(adaptateur):
         Boucle(reaction)
     ])
     return strat
+def AllerRetour(adaptateur):
+      #phase de depart
+    depart = Sequence([
+        AvancerXMetres(adaptateur, 30, 2),
+    ])
+    arriver = Sequence([AvancerXMetres(adaptateur, -30, 2)])
+    
+
+    #strategie globale
+    strat = Sequence([
+        depart,
+        arriver
+    ])
+    return strat
