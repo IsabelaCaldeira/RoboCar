@@ -1,6 +1,7 @@
 from Source import Simulation, Affichage, RoboCar
 from Source import AdaptateurSimule
 from Source import creer_strategie
+from Source import Obstacle
 import time
 
 LARGEUR = 800
@@ -8,7 +9,11 @@ HAUTEUR = 600
 
 
 def main():
-    sim = Simulation(LARGEUR, HAUTEUR) #creation du monde
+    sim = Simulation(LARGEUR, HAUTEUR, [
+            Obstacle("rectangle", (400,250), (50, 50)),
+            Obstacle("rectangle", (400,0), (50, 50)),
+            Obstacle("rectangle", (400,500), (50, 50)),
+        ]) #creation du monde
     robot = RoboCar("Flash", (400, 300), 0, simulation=sim) #creation du robot
     adp = AdaptateurSimule(robot) #adaptateur de pilotage
     view = Affichage(LARGEUR, HAUTEUR) #affichage
