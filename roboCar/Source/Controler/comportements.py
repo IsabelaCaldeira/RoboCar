@@ -5,7 +5,7 @@ def obstacle_proche(adaptateur):
     return adaptateur.get_distance() < 60
 
 
-def creer_strategie(adaptateur1,adaptateur2):
+def creer_strategie(adaptateur1):
     """Cree la strategie globale du robot"""
     #phase de depart
     carre = Sequence([

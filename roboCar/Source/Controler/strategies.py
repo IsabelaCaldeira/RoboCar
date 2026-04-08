@@ -85,6 +85,9 @@ class Condition:
         self.current = None #aucune strategie active au debut
 
     def step(self):
+        if self.current is self.s1 and not self.current.stop():
+            self.current.step()
+            return
         if self.condition(self.adaptateur): #si obstacle proche alors s1
             new = self.s1
         else:
