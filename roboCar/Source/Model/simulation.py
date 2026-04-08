@@ -1,4 +1,5 @@
 from .obstacle import Obstacle
+from .ballon import Ballon
 
 
 class Simulation:
@@ -16,6 +17,8 @@ class Simulation:
         self.obstacles[0].pos_aleatoire()
         self.obstacles[1].pos_aleatoire()
         self.obstacles[2].pos_aleatoire()
+
+        self.ballon=Ballon(300,200,3,2,20)
 
 
     def collision(self, x, y, longueur, largeur):
@@ -49,3 +52,7 @@ class Simulation:
                 return True
 
         return False
+    
+    def update_ballon(self):
+        """Mise a jour du ballon """
+        self.ballon.step(self.largeur,self.hauteur)

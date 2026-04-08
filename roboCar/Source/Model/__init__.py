@@ -2,3 +2,4 @@
 from .robocar import RoboCar
 from .obstacle import Obstacle
 from .simulation import Simulation
+from .ballon import Ballon
