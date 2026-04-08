@@ -14,7 +14,7 @@ def main():
             Obstacle("rectangle", (400,0), (50, 50)),
             Obstacle("rectangle", (400,500), (50, 50)),
         ]) #creation du monde
-    robot = RoboCar("Flash", (400, 300), 0, simulation=sim) #creation du robot
+    robot = RoboCar("Flash", (50, 550), 0, simulation=sim) #creation du robot
     adp = AdaptateurSimule(robot) #adaptateur de pilotage
     view = Affichage(LARGEUR, HAUTEUR) #affichage
     strat = creer_strategie(adp) #creation de la strategie globale

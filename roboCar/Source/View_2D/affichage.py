@@ -57,7 +57,7 @@ class Affichage:
             pygame.draw.rect(self.screen, robot.draw_color, (pos, (1,1)))
 
 
-    def update(self, robot, obstacles):
+    def update(self, robot1, obstacles, robot2=False):
         """Met a jour l'affichage et gere les evenements"""
 
         running = True
@@ -68,8 +68,12 @@ class Affichage:
 
         self.screen.fill((0, 0, 0))
 
-        self.draw_line(robot)        
-        self.draw_robot(robot)
+        self.draw_line(robot1)        
+        self.draw_robot(robot1)
+
+        if robot2:
+            self.draw_line(robot2)        
+            self.draw_robot(robot2)
         self.draw_obstacles(obstacles)
 
         pygame.display.update()
