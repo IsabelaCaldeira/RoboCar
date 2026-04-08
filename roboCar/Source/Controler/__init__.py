@@ -9,3 +9,4 @@ from .strategies import (
 from .adaptateur import Adaptateur
 from .adaptateur_simule import AdaptateurSimule
 from .comportements import creer_strategie
+from .comportements import faire_hexagone

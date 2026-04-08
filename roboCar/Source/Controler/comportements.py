@@ -23,3 +23,15 @@ def creer_strategie(adaptateur):
         Boucle(reaction)
     ])
     return strat
+
+def faire_hexagone(adaptateur):
+    mouvement = Sequence([
+        AvancerXMetres(adaptateur, 50, 2),
+        TournerXDegrees(adaptateur, 60, 0.08, 0)]
+    )
+
+    strat = Sequence([
+        mouvement for _ in range(6)
+    ])
+
+    return strat

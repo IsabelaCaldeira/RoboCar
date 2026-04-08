@@ -84,4 +84,4 @@ class RoboCar:
         self.dessin = b
 
     def changer_couleur(self, couleur):
-        self.line_color = couleur
+        self.draw_color = couleur

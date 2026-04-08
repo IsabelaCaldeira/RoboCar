@@ -52,9 +52,9 @@ class Affichage:
 
     def draw_line(self, robot):
         if robot.draw:
-            self.ligne.append(robot.get_position())
-        for pos in self.ligne:
-            pygame.draw.rect(self.screen, robot.draw_color, (pos, (1,1)))
+            self.ligne.append((robot.draw_color, robot.get_position()))
+        for info in self.ligne:
+            pygame.draw.rect(self.screen, info[0], (info[1], (1,1)))
 
 
     def update(self, robot1, obstacles, robot2=False):
