@@ -55,7 +55,7 @@ class Affichage:
         if robot.trace_visible() and len(trace) >= 2:
             pygame.draw.lines(self.screen, robot.get_couleur_trace(), False, trace, 2)
 
-    def update(self, robot, obstacles):
+    def update(self, robots, obstacles):
         """Met a jour l'affichage et gere les evenements"""
 
         running = True
@@ -65,9 +65,10 @@ class Affichage:
                 running = False
 
         self.screen.fill((0, 0, 0))
-
-        self.draw_trace(robot)
-        self.draw_robot(robot)
+    
+        for robot in robots:
+            self.draw_trace(robot)
+            self.draw_robot(robot)
         self.draw_obstacles(obstacles)
 
         pygame.display.update()
