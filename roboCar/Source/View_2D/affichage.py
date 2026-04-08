@@ -43,11 +43,18 @@ class Affichage:
 
         pygame.draw.line(self.screen, (255, 255, 255), (x, y), (front_x, front_y), 3)
 
+    def draw_trace(self, robot):
+        """Dessine la trajectoire du robot en bleu quand le crayon est abaisse"""
+        trace = robot.get_trace()
+        if len(trace) >= 2:
+            pygame.draw.lines(self.screen, (0, 120, 255), False, trace, 3)
+
     def draw_obstacles(self, obstacles):
         """Dessine les obstacles"""
 
         for obs in obstacles:
             pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
+
     def update(self, robot, obstacles):
         """Met a jour l'affichage et gere les evenements"""
 
@@ -59,6 +66,7 @@ class Affichage:
 
         self.screen.fill((0, 0, 0))
 
+        self.draw_trace(robot)
         self.draw_robot(robot)
         self.draw_obstacles(obstacles)
 

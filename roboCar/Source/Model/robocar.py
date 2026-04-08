@@ -20,6 +20,8 @@ class RoboCar:
         self.longueur = 50
 
         self.simulation = simulation #reference vers le monde
+        self.crayon_abaisse = True
+        self.trace = [coordonnees]
 
     def get_position(self):
         """Retourne (x, y)"""
@@ -51,6 +53,23 @@ class RoboCar:
         self.x = x
         self.y = y
         self.angle = angle
+        if self.crayon_abaisse:
+            self.trace.append((x, y))
+
+    def abaisser_crayon(self): 
+        """Active le trace"""
+        self.crayon_abaisse = True
+        position = self.get_position()
+        if not self.trace or self.trace[-1] != position:
+            self.trace.append(position)
+
+    def lever_crayon(self):
+        """Desactive le trace du robot"""
+        self.crayon_abaisse = False
+
+    def get_trace(self):
+        """Retourne les points traces par le robot"""
+        return self.trace
 
     def step(self):
         """On fait une mise a jour complete 

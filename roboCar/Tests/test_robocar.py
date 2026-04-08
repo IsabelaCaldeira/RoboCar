@@ -19,6 +19,8 @@ class TestRoboCar(unittest.TestCase):
         self.assertEqual(self.robot.vR, 0)
         self.assertEqual(self.robot.longueur, 50)
         self.assertEqual(self.robot.largeur, 40)
+        self.assertTrue(self.robot.crayon_abaisse)
+        self.assertEqual(self.robot.get_trace(), [(100, 200)])
 
     def test_get_position(self):
         """Verifie que get_position() retourne les bonnes coordonnees"""
@@ -73,6 +75,7 @@ class TestRoboCar(unittest.TestCase):
         ok = self.robot.step()
         self.assertTrue(ok)
         self.assertGreater(self.robot.x, ancien_x)
+        self.assertEqual(len(self.robot.get_trace()), 2)
 
     def test_step_avec_collision_mur(self):
         """Verifie que step() retourne False si le robot va heurter un mur"""
@@ -94,6 +97,20 @@ class TestRoboCar(unittest.TestCase):
         self.sim.obstacles.append(Obstacle("rectangle", (150, 180), (40, 40)))
         distance = self.robot.get_distance()
         self.assertLess(distance, 120)
+
+    def test_pas_de_trace_quand_crayon_leve(self):
+        """Verifie que le robot ne trace rien si le crayon est leve"""
+        self.robot.lever_crayon()
+        self.robot.appliquer(120, 200, 0)
+        self.assertEqual(self.robot.get_trace(), [(100, 200)])
+
+    def test_abaisser_crayon_reprend_trace(self):
+        """Verifie que la trace reprend a la position courante quand on rabaisse le crayon"""
+        self.robot.lever_crayon()
+        self.robot.appliquer(120, 200, 0)
+        self.robot.abaisser_crayon()
+        self.robot.appliquer(130, 200, 0)
+        self.assertEqual(self.robot.get_trace(), [(100, 200), (120, 200), (130, 200)])
 
 
 if __name__ == "__main__":

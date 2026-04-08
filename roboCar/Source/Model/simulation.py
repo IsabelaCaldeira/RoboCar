@@ -8,14 +8,12 @@ class Simulation:
     def __init__(self, largeur, hauteur):
         self.largeur = largeur #largeur de la fenetre
         self.hauteur = hauteur #hauteur de la fenetre
+        centre_x = self.largeur // 2
         self.obstacles = [
-            Obstacle("rectangle", (0,0), (80, 100)),
-            Obstacle("rectangle", (0,0), (100, 50)),
-            Obstacle("rectangle", (0,0), (50, 50)),
+            Obstacle("rectangle", (centre_x - 40, 80), (80, 80)),
+            Obstacle("rectangle", (centre_x - 50, self.hauteur // 2 - 30), (100, 60)),
+            Obstacle("rectangle", (centre_x - 40, self.hauteur - 140), (80, 80)),
         ]
-        self.obstacles[0].pos_aleatoire()
-        self.obstacles[1].pos_aleatoire()
-        self.obstacles[2].pos_aleatoire()
 
 
     def collision(self, x, y, longueur, largeur):
