@@ -56,3 +56,6 @@ class Simulation:
     def update_ballon(self):
         """Mise a jour du ballon """
         self.ballon.step(self.largeur,self.hauteur)
+
+    def robot_ballon(self,robot):
+        self.ballon.robot_proche(robot)

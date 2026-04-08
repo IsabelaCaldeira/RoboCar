@@ -30,6 +30,8 @@ def main():
         if not robot2.step():
             adp2.arreter()
         #affichage
+        adp1.step()
+        sim.robot_ballon(adp1)
         sim.update_ballon()
         running = view.update(robot1,robot2, sim.obstacles,sim.ballon)
 
