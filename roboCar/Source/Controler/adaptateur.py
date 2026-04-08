@@ -30,3 +30,13 @@ class Adaptateur(ABC):
     def arreter(self):
         """Arrete le robot"""
         pass
+
+    @abstractmethod
+    def dessine(self, b):
+        """Active ou desactive le trace du robot"""
+        pass
+
+    @abstractmethod
+    def change_couleur(self, couleur):
+        """Change la couleur de la trace du robot"""
+        pass

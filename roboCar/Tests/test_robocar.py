@@ -19,7 +19,7 @@ class TestRoboCar(unittest.TestCase):
         self.assertEqual(self.robot.vR, 0)
         self.assertEqual(self.robot.longueur, 50)
         self.assertEqual(self.robot.largeur, 40)
-        self.assertTrue(self.robot.crayon_abaisse)
+        self.assertFalse(self.robot.crayon_abaisse)
         self.assertEqual(self.robot.get_trace(), [(100, 200)])
 
     def test_get_position(self):
@@ -69,6 +69,7 @@ class TestRoboCar(unittest.TestCase):
 
     def test_step_sans_collision(self):
         """Verifie que step() applique le mouvement si aucune collision n'est detectee"""
+        self.robot.abaisser_crayon()
         self.robot.vG = 10
         self.robot.vR = 10
         ancien_x = self.robot.x

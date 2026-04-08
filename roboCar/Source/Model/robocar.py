@@ -20,8 +20,9 @@ class RoboCar:
         self.longueur = 50
 
         self.simulation = simulation #reference vers le monde
-        self.crayon_abaisse = True
+        self.crayon_abaisse = False
         self.trace = [coordonnees]
+        self.couleur_trace = (0, 0, 200)
 
     def get_position(self):
         """Retourne (x, y)"""
@@ -70,6 +71,25 @@ class RoboCar:
     def get_trace(self):
         """Retourne les points traces par le robot"""
         return self.trace
+    
+    def dessine(self,b):
+        """active ou desactive le trace du robot selon b"""
+        if b:
+            self.abaisser_crayon()
+        else:
+            self.lever_crayon()
+
+    def trace_visible(self):
+        """Retourne True si le trace est visible (crayon abaisse)"""
+        return self.crayon_abaisse
+    
+    def change_couleur(self, couleur):
+        """Change la couleur de la trace"""
+        self.couleur_trace = couleur
+
+    def get_couleur_trace(self):
+        """Retourne la couleur de la trace"""
+        return self.couleur_trace
 
     def step(self):
         """On fait une mise a jour complete 

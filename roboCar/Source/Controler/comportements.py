@@ -1,4 +1,12 @@
-from .strategies import AvancerXMetres, TournerXDegrees, Sequence, Condition, Boucle
+from .strategies import (
+    AvancerXMetres,
+    TournerXDegrees,
+    Sequence,
+    Condition,
+    Boucle,
+    Dessiner,
+    ChangerCouleur,
+)
 def obstacle_proche(adaptateur):
     """Retourne True si un obstacle est detecte a une distance proche"""
     return adaptateur.get_distance() < 60
@@ -6,20 +14,32 @@ def obstacle_proche(adaptateur):
 
 def creer_strategie(adaptateur):
     """Cree la strategie globale du robot"""
-    #phase de depart
-    depart = Sequence([
-        AvancerXMetres(adaptateur, 30, 2),
-    ])
-    #comportement reactif,si obs proche on tourne et on avance un peu sinon
+    couleurs = [
+        (255, 0, 0),
+        (255, 140, 0),
+        (255, 220, 0),
+        (0, 170, 0),
+        (0, 120, 255),
+        (160, 0, 200),
+    ]
+
+    cotes = [Dessiner(adaptateur, True)]
+    for i, couleur in enumerate(couleurs):
+        cotes.append(ChangerCouleur(adaptateur, couleur))
+        cotes.append(AvancerXMetres(adaptateur, 60, 2))
+        if i < len(couleurs) - 1:
+            cotes.append(TournerXDegrees(adaptateur, 60, -0.08, 0))
+
+    hexagone = Sequence(cotes)
+
     reaction = Condition(
         TournerXDegrees(adaptateur, 45, 0.08, 0),
         AvancerXMetres(adaptateur, 2, 2),
         adaptateur,
         obstacle_proche
     )
-    #strategie globale
-    strat = Sequence([
-        depart,
+
+    return Sequence([
+        hexagone,
         Boucle(reaction)
     ])
-    return strat

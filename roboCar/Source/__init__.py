@@ -6,7 +6,9 @@ from .Controler.strategies import (
     TournerXDegrees,
     Sequence,
     Condition,
-    Boucle
+    Boucle,
+    Dessiner,
+    ChangerCouleur
 )
 from .View_2D.affichage import Affichage
 

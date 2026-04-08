@@ -57,3 +57,11 @@ class AdaptateurSimule(Adaptateur):
         """Stop"""
         self.robot.vG = 0
         self.robot.vR = 0
+
+    def dessine(self, b):
+        """Active ou desactive le trace du robot simule"""
+        self.robot.dessine(b)
+
+    def change_couleur(self, couleur):
+        """Change la couleur de la trace du robot simule"""
+        self.robot.change_couleur(couleur)

@@ -115,3 +115,41 @@ class Boucle:
 
     def stop(self):
         return False #une boucle ne s'arrete jamais
+
+
+class Dessiner:
+    """Strategie instantanee qui active ou desactive le trace"""
+    def __init__(self, adaptateur, actif):
+        self.adaptateur = adaptateur
+        self.actif = actif
+        self.fait = False
+
+    def start(self):
+        self.fait = False
+
+    def step(self):
+        if not self.fait:
+            self.adaptateur.dessine(self.actif)
+            self.fait = True
+
+    def stop(self):
+        return self.fait
+
+
+class ChangerCouleur:
+    """Strategie instantanee qui change la couleur de la trace"""
+    def __init__(self, adaptateur, couleur):
+        self.adaptateur = adaptateur
+        self.couleur = couleur
+        self.fait = False
+
+    def start(self):
+        self.fait = False
+
+    def step(self):
+        if not self.fait:
+            self.adaptateur.change_couleur(self.couleur)
+            self.fait = True
+
+    def stop(self):
+        return self.fait

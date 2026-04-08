@@ -9,7 +9,8 @@ HAUTEUR = 600
 
 def main():
     sim = Simulation(LARGEUR, HAUTEUR) #creation du monde
-    robot = RoboCar("Flash", (40, HAUTEUR - 40), 0, simulation=sim) #creation du robot
+    robot = RoboCar("Flash", (140, HAUTEUR - 120), 0, simulation=sim) #creation du robot
+    robot.dessine(True)
     adp = AdaptateurSimule(robot) #adaptateur de pilotage
     view = Affichage(LARGEUR, HAUTEUR) #affichage
     strat = creer_strategie(adp) #creation de la strategie globale
@@ -20,12 +21,12 @@ def main():
         #mise a jour physique du robot
         if not robot.step():
             adp.arreter()
-        #affichage
+        #affichage running = view.update(robot, sim.obstacles)
         running = view.update(robot, sim.obstacles)
-
         time.sleep(0.01)
 
     view.stop()
 
 if __name__ == "__main__":
     main()
+    

@@ -70,3 +70,11 @@ class AdaptateurReel(Adaptateur):
         """Arrete completement le robot reel"""
         self.robot.set_motor_dps(self.robot.MOTOR_LEFT, 0)
         self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, 0)
+
+    def dessine(self, b):
+        """Le vrai robot ne gere pas de trace graphique"""
+        return None
+
+    def change_couleur(self, couleur):
+        """Le vrai robot ne gere pas de couleur de trace graphique"""
+        return None
