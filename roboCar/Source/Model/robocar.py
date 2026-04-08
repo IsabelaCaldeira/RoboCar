@@ -21,6 +21,9 @@ class RoboCar:
 
         self.simulation = simulation #reference vers le monde
 
+        self.draw = True
+        self.draw_color = (0, 0, 200)
+
     def get_position(self):
         """Retourne (x, y)"""
         return self.x, self.y
@@ -76,3 +79,9 @@ class RoboCar:
                 return d
 
         return max_range
+    
+    def dessiner(self, b):
+        self.dessin = b
+
+    def changer_couleur(couleur):
+        self.line_color = couleur

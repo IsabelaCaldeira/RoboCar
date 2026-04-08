@@ -51,9 +51,11 @@ class Affichage:
             pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
 
     def draw_line(self, robot):
-        self.ligne.append(robot.get_position())
+        if robot.draw:
+            self.ligne.append(robot.get_position())
         for pos in self.ligne:
-            pygame.draw.rect(self.screen, (0, 0, 200), (pos, (1,1)))
+            pygame.draw.rect(self.screen, robot.draw_color, (pos, (1,1)))
+
 
     def update(self, robot, obstacles):
         """Met a jour l'affichage et gere les evenements"""

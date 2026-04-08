@@ -115,3 +115,6 @@ class Boucle:
 
     def stop(self):
         return False #une boucle ne s'arrete jamais
+    
+class Hexagone:
+    def __init__(self, )
