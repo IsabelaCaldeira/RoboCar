@@ -23,7 +23,9 @@ class AdaptateurReel(Adaptateur):
         en vitesse de roue gauche et de roue droite"""
         vG = v - (w * self.WHEEL_BASE_WIDTH / 2)
         vR = v + (w * self.WHEEL_BASE_WIDTH / 2)
-        return vG, vR
+
+        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, vG)
+        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, vR)
 
     def get_distance(self):
         """Lit directement la distance sur le capteur du robot reel

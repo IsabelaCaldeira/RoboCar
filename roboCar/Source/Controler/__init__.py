@@ -8,4 +8,5 @@ from .strategies import (
 )
 from .adaptateur import Adaptateur
 from .adaptateur_simule import AdaptateurSimule
+from .adaptateur_reel import AdaptateurReel
 from .comportements import creer_strategie
