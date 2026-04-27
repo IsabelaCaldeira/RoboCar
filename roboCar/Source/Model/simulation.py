@@ -1,3 +1,5 @@
+import random
+
 from .obstacle import Obstacle
 
 
@@ -5,17 +7,52 @@ class Simulation:
     """Classe qui represente le monde elle sert uniquement a stocker les dimensions,obstacles et verifier les collision
     """
 
-    def __init__(self, largeur, hauteur):
+    def __init__(self, largeur, hauteur, zone_interdite=None):
         self.largeur = largeur #largeur de la fenetre
         self.hauteur = hauteur #hauteur de la fenetre
-        self.obstacles = [
-            Obstacle("rectangle", (0,0), (80, 100)),
-            Obstacle("rectangle", (0,0), (100, 50)),
-            Obstacle("rectangle", (0,0), (50, 50)),
-        ]
-        self.obstacles[0].pos_aleatoire()
-        self.obstacles[1].pos_aleatoire()
-        self.obstacles[2].pos_aleatoire()
+        self.zone_interdite = zone_interdite
+        self.obstacles = []
+
+        for dimensions in [(80, 100), (100, 50), (50, 50)]:
+            self.ajouter_obstacle_aleatoire(*dimensions)
+
+    def est_valide(self, x, y, l, h):
+        """Renvoie True si l'obstacle est valide"""
+        if x < 0 or y < 0 or x + l > self.largeur or y + h > self.hauteur:
+            return False
+
+        for obs in self.obstacles:
+            ox, oy = obs.pos
+            ol, oh = obs.dim
+
+            if (
+                x < ox + ol and x + l > ox and
+                y < oy + oh and y + h > oy
+            ):
+                return False
+
+        if self.zone_interdite is not None:
+            rx, ry, rl, rh = self.zone_interdite
+
+            if (
+                x < rx + rl and x + l > rx and
+                y < ry + rh and y + h > ry
+            ):
+                return False
+
+        return True
+
+    def ajouter_obstacle_aleatoire(self, l, h, max_essais=100):
+        """Ajoute un obstacle aleatoire sans chevauchement."""
+        for _ in range(max_essais):
+            x = random.randint(0, self.largeur - l)
+            y = random.randint(0, self.hauteur - h)
+
+            if self.est_valide(x, y, l, h):
+                self.obstacles.append(Obstacle("rectangle", (x, y), (l, h)))
+                return True
+
+        return False
 
 
     def collision(self, x, y, longueur, largeur):
