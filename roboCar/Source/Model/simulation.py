@@ -61,7 +61,70 @@ class Simulation:
 
         return False
 
- 
+    def initialiser_souris(self, taille=18, vitesse=3):
+        """Place une souris mobile dans une zone libre."""
+        for _ in range(100):
+            x = random.randint(0, self.largeur - taille)
+            y = random.randint(0, self.hauteur - taille)
+
+            if self.est_valide(x, y, taille, taille):
+                self.souris = {"x": x, "y": y, "taille": taille}
+                vx = random.choice([-vitesse, vitesse])
+                vy = random.choice([-vitesse, vitesse])
+                self.vitesse_souris = (vx, vy)
+                return True
+
+        return False
+
+    def deplacer_souris(self):
+        """Met a jour la souris mobile avec rebond sur les bords."""
+        if self.souris is None:
+            return
+
+        x = self.souris["x"]
+        y = self.souris["y"]
+        taille = self.souris["taille"]
+        vx, vy = self.vitesse_souris
+
+        next_x = x + vx
+        next_y = y + vy
+
+        if next_x < 0 or next_x + taille > self.largeur:
+            vx = -vx
+            next_x = x + vx
+        if next_y < 0 or next_y + taille > self.hauteur:
+            vy = -vy
+            next_y = y + vy
+
+        touche_obstacle = False
+        for obs in self.obstacles:
+            ox, oy = obs.pos
+            ol, oh = obs.dim
+            if self.rectangles_chevauchent(next_x, next_y, taille, taille, ox, oy, ol, oh):
+                touche_obstacle = True
+                break
+
+        if touche_obstacle:
+            vx = -vx
+            vy = -vy
+            next_x = x + vx
+            next_y = y + vy
+
+        self.souris["x"] = next_x
+        self.souris["y"] = next_y
+        self.vitesse_souris = (vx, vy)
+
+    def attraper_souris(self):
+        """Replace la souris apres capture."""
+        if self.souris is None:
+            return
+
+        taille = self.souris["taille"]
+        vitesse = max(abs(self.vitesse_souris[0]), abs(self.vitesse_souris[1]), 1)
+        self.souris_attrapees += 1
+        self.souris = None
+        self.initialiser_souris(taille=taille, vitesse=vitesse)
+
 
     def collision(self, x, y, longueur, largeur):
         """Verifie si il y a collision avec un mur ou un obstacle
