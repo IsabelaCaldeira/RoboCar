@@ -145,3 +145,50 @@ class LimiterTemps:
         return (time.monotonic() - self.temps_depart) >= self.duree_secondes
 
 
+class SuivreSouris:
+    """Strategie reactive qui poursuit une souris mobile"""
+    def __init__(self, adaptateur, simulation, vitesse_lineaire=2.8, gain_rotation=0.08):
+        self.adaptateur = adaptateur
+        self.simulation = simulation
+        self.vitesse_lineaire = vitesse_lineaire
+        self.gain_rotation = gain_rotation
+
+    def start(self):
+        pass
+
+    def step(self):
+        souris = self.simulation.souris
+        robot = self.adaptateur.robot
+
+        if souris is None:
+            self.adaptateur.arreter()
+            return
+
+        cible_x = souris["x"] + souris["taille"] / 2
+        cible_y = souris["y"] + souris["taille"] / 2
+
+        dx = cible_x - robot.x
+        dy = cible_y - robot.y
+        distance = math.hypot(dx, dy)
+
+        #Quand le robot est assez proche on considere la souris attrapee
+        if distance < max(robot.longueur, robot.largeur):
+            self.simulation.attraper_souris()
+            self.adaptateur.arreter()
+            return
+
+        angle_cible = math.atan2(dy, dx)
+        erreur_angle = math.atan2(
+            math.sin(angle_cible - robot.angle),
+            math.cos(angle_cible - robot.angle)
+        )
+
+        #On ralentit dans les virages serres pour garder une trajectoire stable
+        vitesse = self.vitesse_lineaire
+        if abs(erreur_angle) > 0.6:
+            vitesse = self.vitesse_lineaire * 0.55
+
+        self.adaptateur.set_vitesse(vitesse, erreur_angle * self.gain_rotation)
+
+    def stop(self):
+        return False
