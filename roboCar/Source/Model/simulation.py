@@ -7,13 +7,19 @@ class Simulation:
     """Classe qui represente le monde elle sert uniquement a stocker les dimensions,obstacles et verifier les collision
     """
 
-    def __init__(self, largeur, hauteur, zone_interdite=None):
+    def __init__(self, largeur, hauteur, zone_interdite=None, obstacle_dimensions=None):
         self.largeur = largeur #largeur de la fenetre
         self.hauteur = hauteur #hauteur de la fenetre
         self.zone_interdite = zone_interdite
         self.obstacles = []
+        self.souris = None
+        self.vitesse_souris = (0, 0)
+        self.souris_attrapees = 0
 
-        for dimensions in [(80, 100), (100, 50), (50, 50)]:
+        if obstacle_dimensions is None:
+            obstacle_dimensions = [(80, 100), (100, 50), (50, 50)]
+
+        for dimensions in obstacle_dimensions:
             self.ajouter_obstacle_aleatoire(*dimensions)
 
     def est_valide(self, x, y, l, h):
@@ -25,22 +31,23 @@ class Simulation:
             ox, oy = obs.pos
             ol, oh = obs.dim
 
-            if (
-                x < ox + ol and x + l > ox and
-                y < oy + oh and y + h > oy
-            ):
+            if self.rectangles_chevauchent(x, y, l, h, ox, oy, ol, oh):
                 return False
 
         if self.zone_interdite is not None:
             rx, ry, rl, rh = self.zone_interdite
 
-            if (
-                x < rx + rl and x + l > rx and
-                y < ry + rh and y + h > ry
-            ):
+            if self.rectangles_chevauchent(x, y, l, h, rx, ry, rl, rh):
                 return False
 
         return True
+
+    def rectangles_chevauchent(self, x1, y1, l1, h1, x2, y2, l2, h2):
+        """Retourne True si deux rectangles se chevauchent."""
+        return (
+            x1 < x2 + l2 and x1 + l1 > x2 and
+            y1 < y2 + h2 and y1 + h1 > y2
+        )
 
     def ajouter_obstacle_aleatoire(self, l, h, max_essais=100):
         """Ajoute un obstacle aleatoire sans chevauchement."""
@@ -54,6 +61,7 @@ class Simulation:
 
         return False
 
+ 
 
     def collision(self, x, y, longueur, largeur):
         """Verifie si il y a collision avec un mur ou un obstacle
@@ -77,12 +85,7 @@ class Simulation:
             x2, y2 = obs.pos
             w2, h2 = obs.dim
 
-            if (
-                x1 < x2 + w2 and
-                x1 + w1 > x2 and
-                y1 < y2 + h2 and
-                y1 + h1 > y2
-            ):
+            if self.rectangles_chevauchent(x1, y1, w1, h1, x2, y2, w2, h2):
                 return True
 
         return False
