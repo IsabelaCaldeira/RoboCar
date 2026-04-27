@@ -48,7 +48,18 @@ class Affichage:
 
         for obs in obstacles:
             pygame.draw.rect(self.screen, (200, 0, 0), (*obs.pos, *obs.dim))
-    def update(self, robot, obstacles):
+
+    def draw_souris(self, souris):
+        """Dessine la souris mobile."""
+        if souris is None:
+            return
+
+        rect = pygame.Rect(souris["x"], souris["y"], souris["taille"], souris["taille"])
+        pygame.draw.ellipse(self.screen, (255, 215, 0), rect)
+        pygame.draw.circle(self.screen, (255, 240, 180), rect.midleft, 4)
+        pygame.draw.circle(self.screen, (255, 240, 180), rect.midright, 4)
+
+    def update(self, robot, obstacles, souris=None):
         """Met a jour l'affichage et gere les evenements"""
 
         running = True
@@ -61,6 +72,7 @@ class Affichage:
 
         self.draw_robot(robot)
         self.draw_obstacles(obstacles)
+        self.draw_souris(souris)
 
         pygame.display.update()
 
