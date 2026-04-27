@@ -19,8 +19,15 @@ def main():
     scene.up = vector(0, 1, 0) #direction du haut
     scene.range = 500 #niveau de zoom global
 
-    sim = Simulation(LARGEUR, HAUTEUR)
-    robot = RoboCar("Flash", (100, 300), 0, simulation=sim)
+    robot = RoboCar("Flash", (100, 300), 0)
+    zone_robot = (
+        robot.x - robot.longueur / 2,
+        robot.y - robot.largeur / 2,
+        robot.longueur,
+        robot.largeur,
+    )
+    sim = Simulation(LARGEUR, HAUTEUR, zone_interdite=zone_robot)
+    robot.simulation = sim
     adp = AdaptateurSimule(robot)
     strat = creer_strategie(adp) #creation de la strategie globale
     strat.start()
