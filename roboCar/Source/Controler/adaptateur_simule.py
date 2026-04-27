@@ -57,3 +57,10 @@ class AdaptateurSimule(Adaptateur):
         """Stop"""
         self.robot.vG = 0
         self.robot.vR = 0
+
+    def synchroniser(self):
+        """Remet les mesures internes sur l'etat courant du robot."""
+        x, y = self.robot.get_position()
+        self.old_x = x
+        self.old_y = y
+        self.old_angle = self.robot.get_angle()

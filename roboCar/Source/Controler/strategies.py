@@ -1,4 +1,5 @@
 import math
+import time
 
 
 class AvancerXMetres:
@@ -115,3 +116,32 @@ class Boucle:
 
     def stop(self):
         return False #une boucle ne s'arrete jamais
+
+
+class LimiterTemps:
+    """Execute une strategie pendant une duree fixe en secondes"""
+    def __init__(self, strat, duree_secondes):
+        self.strat = strat
+        self.duree_secondes = duree_secondes
+        self.temps_depart = None
+
+    def start(self):
+        #Cette enveloppe sert a donner une duree reelle a la phase 2
+        self.temps_depart = time.monotonic()
+        self.strat.start()
+
+    def step(self):
+        if self.stop():
+            return
+
+        if self.strat.stop():
+            self.strat.start()
+
+        self.strat.step()
+
+    def stop(self):
+        if self.temps_depart is None:
+            return False
+        return (time.monotonic() - self.temps_depart) >= self.duree_secondes
+
+
