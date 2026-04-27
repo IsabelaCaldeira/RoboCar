@@ -19,6 +19,24 @@ class TestSimulation(unittest.TestCase):
         resultat = self.sim.collision(400, 300, 50, 40)
         self.assertIsInstance(resultat, bool)
 
+    def test_est_valide_retourne_false_si_chevauchement(self):
+        """Verifie que est_valide() refuse un obstacle qui chevauche un autre obstacle"""
+        sim = Simulation(800, 600)
+        sim.obstacles = [Obstacle("rectangle", (100, 100), (80, 100))]
+        self.assertFalse(sim.est_valide(120, 120, 50, 40))
+
+    def test_est_valide_retourne_true_si_position_libre(self):
+        """Verifie que est_valide() accepte un obstacle dans une zone libre"""
+        sim = Simulation(800, 600)
+        sim.obstacles = [Obstacle("rectangle", (100, 100), (80, 100))]
+        self.assertTrue(sim.est_valide(300, 300, 50, 40))
+
+    def test_est_valide_retourne_false_si_chevauche_zone_interdite(self):
+        """Verifie que est_valide() refuse un obstacle sur la zone interdite du robot"""
+        sim = Simulation(800, 600, zone_interdite=(375, 280, 50, 40))
+        sim.obstacles = []
+        self.assertFalse(sim.est_valide(380, 290, 50, 40))
+
     def test_pas_de_collision_au_centre(self):
         """Verifie qu'un robot place dans une zone libre ne collisionne pas forcement"""
         sim = Simulation(800, 600)
