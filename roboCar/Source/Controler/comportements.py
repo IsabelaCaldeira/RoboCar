@@ -35,7 +35,7 @@ def creer_strategie(adaptateur, simulation):
     )
 
     return Sequence([
-        LimiterTemps(Boucle(carre), 30.0),
-        LimiterTemps(Boucle(reaction), 40.0),
+        LimiterTemps(Boucle(carre), 40.0),
+        LimiterTemps(Boucle(reaction), 30.0),
         Boucle(SuivreSouris(adaptateur, simulation)),
     ])
